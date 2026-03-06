@@ -54,11 +54,11 @@
 
 
 #include <cstdio>
-#include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
-#include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
+// #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
+// #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
 
-// #include "/home/andrey/raylib/src/raylib.h"
-// #include "/home/andrey/raylib/src/raymath.h"
+#include "/home/andrey/raylib/src/raylib.h"
+#include "/home/andrey/raylib/src/raymath.h"
 
 int main() {
    InitWindow(800, 800, "3D Clock");
