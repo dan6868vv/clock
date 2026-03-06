@@ -68,8 +68,8 @@ int main() {
     ToggleFullscreen(); // Включаем полноэкранный режим
 
     // Загружаем модель
-    Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/TV_46.obj");
-    Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/tv_45/strelka.obj");
+    Model clock = LoadModel("./TV_46.obj");
+    Model needle = LoadModel("./strelka.obj");
 
     Camera3D camera = { 0 };
     camera.position = (Vector3){ 45.0f, 0.0f, 0.0f };
