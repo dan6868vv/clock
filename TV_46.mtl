@@ -1,5 +1,5 @@
 # 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
-# File Created: 06.03.2026 16:10:43
+# File Created: 06.03.2026 16:15:30
 
 newmtl fon
 	Kd 0.5880 0.5880 0.5880
@@ -30,17 +30,3 @@ newmtl Material__10946
 	Ke 0.0000 0.0000 0.0000
 	illum 2
 	map_Kd maps\tv_45.png
-
-newmtl black_ruchki
-	Kd 0.0471 0.0471 0.0471
-	Ks 0.9000 0.9000 0.9000
-	Tr 0.0000
-	d 1.0000
-	Tf 1.0000 1.0000 1.0000
-	Pr 0.9000
-	Pm 0.0000
-	Pc 0.0000
-	Pcr 0.0000
-	Ni 1.5200
-	Ke 0.0000 0.0000 0.0000
-	illum 2

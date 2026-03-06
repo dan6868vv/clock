@@ -54,22 +54,25 @@
 
 
 #include <cstdio>
-// #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
-// #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
+#include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
+#include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
 
-#include "/home/andrey/raylib/src/raylib.h"
-#include "/home/andrey/raylib/src/raymath.h"
+// #include "/home/andrey/raylib/src/raylib.h"
+// #include "/home/andrey/raylib/src/raymath.h"
 
 int main() {
-   InitWindow(1000, 1000, "3D Clock");
+   InitWindow(800, 800, "3D Clock");
 
     // Флаг для отслеживания полноэкранного режима
     bool isFullscreen = true;
-    ToggleFullscreen(); // Включаем полноэкранный режим
+  //  ToggleFullscreen(); // Включаем полноэкранный режим
 
     // Загружаем модель
-    Model clock = LoadModel("./TV_46.obj");
-    Model needle = LoadModel("./tv_45/strelka.obj");
+    // Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/TV_46.obj");
+    // Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/tv_45/strelka.obj");
+
+    Model clock = LoadModel("~/qwer/clock/TV_46.obj");
+    Model needle = LoadModel("~/qwer/clock/tv_45/strelka.obj");
 
     Camera3D camera = { 0 };
     camera.position = (Vector3){ 45.0f, 0.0f, 0.0f };
