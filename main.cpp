@@ -71,8 +71,8 @@ int main() {
     // Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/TV_46.obj");
     // Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/tv_45/strelka.obj");
 
-    Model clock = LoadModel("~/qwer/clock/TV_46.obj");
-    Model needle = LoadModel("~/qwer/clock/tv_45/strelka.obj");
+    Model clock = LoadModel("/home/andrey/qwer/clock/TV_46.obj");
+    Model needle = LoadModel("/home/andrey/qwer/clock/tv_45/strelka.obj");
 
     Camera3D camera = { 0 };
     camera.position = (Vector3){ 45.0f, 0.0f, 0.0f };
