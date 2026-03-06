@@ -69,7 +69,7 @@ int main() {
 
     // Загружаем модель
     Model clock = LoadModel("./TV_46.obj");
-    Model needle = LoadModel("./strelka.obj");
+    Model needle = LoadModel("./tv_45/strelka.obj");
 
     Camera3D camera = { 0 };
     camera.position = (Vector3){ 45.0f, 0.0f, 0.0f };
