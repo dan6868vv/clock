@@ -1,0 +1,61 @@
+# 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
+# File Created: 04.03.2026 15:01:20
+
+newmtl bel
+	Kd 0.678431 0.678431 0.678431
+	Ks 0.900000 0.900000 0.900000
+	Tr 0.000000
+	d 1.000000
+	Tf 1.000000 1.000000 1.000000
+	Pr 0.900000
+	Pm 0.000000
+	Pc 0.000000
+	Pcr 0.000000
+	Ni 1.520000
+	Ke 0.000000 0.000000 0.000000
+	illum 2
+	map_Kd D:\_root\Job\AeroMash_new\res_prib3\WORK\G(Graphics)\Planes_cabin\Mi_35\map\white.png
+
+newmtl fon
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.900000 0.900000 0.900000
+	Tr 0.000000
+	d 1.000000
+	Tf 1.000000 1.000000 1.000000
+	Pr 0.900000
+	Pm 0.000000
+	Pc 0.000000
+	Pcr 0.000000
+	Ni 1.520000
+	Ke 0.000000 0.000000 0.000000
+	illum 2
+	map_Kd D:\_root\Job\AeroMash_new\res_prib3\WORK\G(Graphics)\Planes_cabin\Mi_35\map\black.png
+
+newmtl Material__10946
+	Kd 0.588000 0.588000 0.588000
+	Ks 0.900000 0.900000 0.900000
+	Tr 0.000000
+	d 1.000000
+	Tf 1.000000 1.000000 1.000000
+	Pr 0.900000
+	Pm 0.000000
+	Pc 0.000000
+	Pcr 0.000000
+	Ni 1.520000
+	Ke 0.000000 0.000000 0.000000
+	illum 2
+	map_Kd D:\_root\Job\AeroMash_new\res_prib3\WORK\G(Graphics)\Planes_cabin\Mi_35\map\tv_45.png
+
+newmtl black_ruchki
+	Kd 0.047059 0.047059 0.047059
+	Ks 0.900000 0.900000 0.900000
+	Tr 0.000000
+	d 1.000000
+	Tf 1.000000 1.000000 1.000000
+	Pr 0.900000
+	Pm 0.000000
+	Pc 0.000000
+	Pcr 0.000000
+	Ni 1.520000
+	Ke 0.000000 0.000000 0.000000
+	illum 2
