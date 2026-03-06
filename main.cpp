@@ -86,7 +86,7 @@ int main() {
             SetWindowSize(500,500);
             isFullscreen = false;
         }
-        RestoreWindow();
+       // RestoreWindow();
         // Альтернативный вариант: повторное нажатие ESC для переключения туда-обратно
         // if (IsKeyPressed(KEY_ESCAPE)) {
         //     ToggleFullscreen();
