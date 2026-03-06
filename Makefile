@@ -10,7 +10,8 @@ INCLUDES = -I$(RAYLIB_PATH)/raylib/include
 LIBS_PATH = -L$(RAYLIB_PATH)/raylib
 
 # Библиотеки для линковки
-LIBS = -lraylib -lGLESv2 -lEGL -lpthread -lm -ldl -lrt
+#LIBS = -lraylib -lGLESv2 -lEGL -lpthread -lm -ldl -lrt
+LIBS = -lpthread -lm -ldl -lrt
 
 # Флаги компиляции
 CXXFLAGS = -Wall -std=c++11
