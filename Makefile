@@ -9,6 +9,7 @@ RAYLIB_PATH = $(HOME)/raylib/build
 INCLUDES = -I$(RAYLIB_PATH)/raylib/include
 LIBS_PATH = -L$(RAYLIB_PATH)/raylib
 
+SYS_TYPE = -_WIN64
 # Библиотеки для линковки
 LIBS = -lraylib -lGLESv2 -lEGL -lpthread -lm -ldl -lrt
 #LIBS = -lpthread -lm -ldl -lrt
@@ -25,7 +26,7 @@ all: $(TARGET)
 
 # Линковка
 $(TARGET): $(OBJS)
-	$(CXX) $(OBJS) -o $(TARGET) $(LIBS_PATH) $(LIBS)
+	$(CXX) $(SYS_TYPE) $(OBJS) -o $(TARGET) $(LIBS_PATH) $(LIBS)
 
 # Компиляция
 %.o: %.cpp
