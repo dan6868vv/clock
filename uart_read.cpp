@@ -118,20 +118,21 @@ int main(int argc, char **argv) {
         perror("mkfifo");
         return 1;
     }
-    int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
-    std::cout << "fd2 = " << fd2 << std::endl;
-    if (fd2 == -1) {
-        std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
-        perror("open");
-    }
+
     while(true){
         if (fd != -1 && reader != nullptr) {
             float angle = 0;
             bool flag = reader->readFloat(angle);
             if (flag) {
                 std::cout << angle << std::endl;
+                int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+                std::cout << "fd2 = " << fd2 << std::endl;
+                if (fd2 == -1) {
+                    std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
+                    perror("open");
+                }
                 std::string angleByString = std::to_string(angle);
-                if ((write(0, angleByString.c_str(), angleByString.length())) == -1){
+                if ((write(fd2, angleByString.c_str(), angleByString.length())) == -1){
                 perror("write");
 }
             }
