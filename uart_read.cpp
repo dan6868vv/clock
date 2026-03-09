@@ -7,6 +7,9 @@
 #include <errno.h>
 #include <wiringSerial.h>
 #include <wiringPi.h>
+#include <fstream>
+#include <fcntl.h>
+#include <unistd.h>
 //#include <SFML/Graphics.hpp>
 #include <fstream>  // Для чтения конфигурационного файла
 #include <map>      // Для хранения пар ключ-значение из конфига
@@ -100,6 +103,18 @@ int main(int argc, char **argv) {
 
     while(true){
         if (fd != -1 && reader != nullptr) {
+            int fd2 = open("my_channel", O_WRONLY);
+            if (fd2 < 0) {
+                std::cerr << "Ошибка открытия канала" << std::endl;
+                return 1;
+            }
+            // Отправляем данные
+            std::string data = "Данные из первой программы";
+            write(fd2, data.c_str(), data.length());
+
+            std::cout << "Данные отправлены" << std::endl;
+
+            close(fd2);
         float angle = 0;
             if (reader->readFloat(angle)) {
                 std::cout << angle << std::endl;
