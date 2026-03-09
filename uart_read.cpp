@@ -123,12 +123,19 @@ int main(int argc, char **argv) {
     while(true){
         std::cout << "fd = " << fd << std::endl;
         std::cout << "reader = " << reader << std::endl;
+        std::cout << "Before if " << std::endl;
         if (fd != -1 && reader != nullptr) {
+        std::cout<< "After if " << std::endl;
+
             float angle = 0;
+            std::cout << "angle = " << angle << std::endl;
             bool flag = reader->readFloat(angle);
+            std::cout << "flag = " << flag << std::endl;
             if (flag) {
                 std::cout << angle << std::endl;
+                std::cout << "In if(flag); angle = " << angle << std::endl;
             }
+            std::cout << "angle = " << angle << std::endl;
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
 
