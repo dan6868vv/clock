@@ -103,10 +103,10 @@ int main() {
   //  ToggleFullscreen(); // Включаем полноэкранный режим
 
     #ifdef __unix__
-    // Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_frame.obj");
-    // Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_needle.obj");
-    Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/scale.obj");
-    Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/needle_2.obj");
+     Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_frame.obj");
+     Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_needle.obj");
+ //   Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/scale.obj");
+ //   Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/needle_2.obj");
  //   Model yellow = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/yellow.obj");
     #elif defined(_WIN64)
     // Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
