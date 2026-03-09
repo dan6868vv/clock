@@ -131,8 +131,9 @@ int main(int argc, char **argv) {
             if (flag) {
                 std::cout << angle << std::endl;
                 std::string angleByString = std::to_string(angle);
-                write(0, angleByString.c_str(), angleByString.length());
-
+                if ((write(0, angleByString.c_str(), angleByString.length())) == -1){
+                perror("write");
+}
             }
         //    if(fd2 != -1){
             //    std::string angleByString = std::to_string(angle);
