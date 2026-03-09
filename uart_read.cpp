@@ -1,0 +1,122 @@
+#include <iostream>
+#include <string>
+#include <sstream>
+#include <vector>
+#include <cstring>
+#include <cmath>
+#include <errno.h>
+#include <wiringSerial.h>
+#include <wiringPi.h>
+//#include <SFML/Graphics.hpp>
+#include <fstream>  // Для чтения конфигурационного файла
+#include <map>      // Для хранения пар ключ-значение из конфига
+#define FLOAT_TO_INT(x) ((x)>=0.0f?(int)((x)+0.5f):(int)((x)-0.5f))
+
+
+// Класс для накопления строки из UART
+class UARTLineReader {
+private:
+    std::string currentLine;
+    int fd;
+
+public:
+    UARTLineReader(int serialFd) : fd(serialFd) {
+    }
+
+    // Проверяет, есть ли полная строка (до \n)
+    bool readLine(std::string &line) {
+        while (serialDataAvail(fd) > 0) {
+            char received = serialGetchar(fd);
+
+            if (received == '\n') {
+                line = currentLine;
+                currentLine.clear();
+                return true;
+            } else if (received != '\r') {
+                currentLine += received;
+            }
+        }
+        return false;
+    }
+
+    // Читает и пытается преобразовать в число
+    bool readFloat(float &value) {
+        std::string line;
+        if (readLine(line)) {
+            try {
+                value = std::stof(line);
+                // Нормализуем угол в диапазон 0-360
+                value = fmod(value, 360.0f);
+                if (value < 0) value += 360.0f;
+                return true;
+            } catch (const std::exception &e) {
+                std::cout << "Получено не число: " << line << std::endl;
+            }
+        }
+        return false;
+    }
+};
+
+int main(int argc, char **argv) {
+    // Параметры по умолчанию
+    std::string port = "/dev/serial0";
+    int baudRate = 9600;
+
+    // Можно передать порт и скорость как аргументы командной строки
+    if (argc > 1) {
+        port = argv[1];
+    }
+    if (argc > 2) {
+        baudRate = std::stoi(argv[2]);
+    }
+
+    std::cout << "======================================" << std::endl;
+    std::cout << "UART Gauge с PNG поддержкой" << std::endl;
+    std::cout << "\033[34mUART Gauge с PNG поддержкой\033[0m" << std::endl;
+    std::cout << "======================================" << std::endl;
+    std::cout << "Порт: " << port << std::endl;
+    std::cout << "Скорость: " << baudRate << std::endl;
+    std::cout << "======================================" << std::endl;
+
+    // Инициализация wiringPi
+    if (wiringPiSetup() == -1) {
+        std::cerr << "❌ Ошибка инициализации wiringPi" << std::endl;
+        return 1;
+    }
+
+    // Открываем последовательный порт
+    int fd = serialOpen(port.c_str(), baudRate);
+
+    if (fd == -1) {
+        std::cerr << "❌ Не удалось открыть порт: " << strerror(errno) << std::endl;
+        std::cerr << "⚠️ Продолжаем в демо-режиме (без UART)..." << std::endl;
+    } else {
+        std::cout << "✅ Порт открыт успешно. Ожидание данных..." << std::endl;
+    }
+
+    // Создаем читатель UART (только если порт открыт)
+    UARTLineReader *reader = nullptr;
+    reader = new UARTLineReader(fd);
+
+    while(true){
+        if (fd != -1 && reader != nullptr) {
+        float angle = 0;
+            if (reader->readFloat(angle)) {
+                std::cout << angle << std::endl;
+            }
+        } else {
+            std::cout << "\033[31mUART не определен\033[0m" << std::endl;
+        }
+    }
+
+    // Очистка
+    if (reader != nullptr) {
+        delete reader;
+    }
+    if (fd != -1) {
+        serialClose(fd);
+        std::cout << "Порт закрыт" << std::endl;
+    }
+
+    return 0;
+}
