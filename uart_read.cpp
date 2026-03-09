@@ -107,7 +107,7 @@ int main(int argc, char **argv) {
 
     // Создаем канал
    // mkfifo(pipe_path, 0666);
-    if ( mkfifo(pipe_path, 0777) ) {
+    if (mkfifo(pipe_path, 0666) ) {
         perror("mkfifo");
         return 1;
     }
@@ -119,8 +119,9 @@ int main(int argc, char **argv) {
             }
             // Открываем канал для записи
             int fd2 = open(pipe_path, O_WRONLY);
-            if (fd2 == -1) {
-                std::cerr << "Ошибка открытия канала" << std::endl;
+            if ((fd2 = open(pipe_path, O_WRONLY))<=0) {
+                //std::cerr << "Ошибка открытия канала" << std::endl;
+                perror("open");
               //  return 1;
             } else{
                // std::string angleByString = std::to_string(angle);
