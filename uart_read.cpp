@@ -100,25 +100,26 @@ int main(int argc, char **argv) {
     // Создаем читатель UART (только если порт открыт)
     UARTLineReader *reader = nullptr;
     reader = new UARTLineReader(fd);
+    const char* pipe_path = "/tmp/myapp_pipe";
 
+    // Создаем канал
+    mkfifo(pipe_path, 0666);
     while(true){
         if (fd != -1 && reader != nullptr) {
-            int fd2 = open("my_channel", O_WRONLY);
-            if (fd2 < 0) {
-                std::cerr << "Ошибка открытия канала" << std::endl;
-                return 1;
-            }
-            // Отправляем данные
-            std::string data = "Данные из первой программы";
-            write(fd2, data.c_str(), data.length());
-
-            std::cout << "Данные отправлены" << std::endl;
-
-            close(fd2);
-        float angle = 0;
+           float angle = 0;
             if (reader->readFloat(angle)) {
                 std::cout << angle << std::endl;
             }
+            // Открываем канал для записи
+            int fd2 = open(pipe_path, O_WRONLY);
+            if (fd2 == -1) {
+
+                std::cerr << "Ошибка открытия канала" << std::endl;
+                return 1;
+            }
+            std::string angleByString = std::to_string(angle);
+            write(fd, angleByString.c_str(), angleByString.length());
+            close(fd);
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
