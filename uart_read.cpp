@@ -134,8 +134,10 @@ int main(int argc, char **argv) {
                 std::string angleByString = std::to_string(angle);
                 if ((write(fd2, angleByString.c_str(), angleByString.length())) == -1){
                 perror("write");
-}
+                }
+                close(fd2);
             }
+
         //    if(fd2 != -1){
             //    std::string angleByString = std::to_string(angle);
                 // std::string angleByString = "Danila";
@@ -153,7 +155,7 @@ int main(int argc, char **argv) {
     }
     if (fd != -1) {
         serialClose(fd);
-        close(fd2);
+
         std::cout << "Порт закрыт" << std::endl;
     }
 
