@@ -118,7 +118,7 @@ int main(int argc, char **argv) {
         perror("mkfifo");
         return 1;
     }
-    int fd2 = open(pipe_path.c_str(), O_WRONLY);
+    int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
     if (fd2 == -1) {
         std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
         perror("open");
