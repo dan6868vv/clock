@@ -116,13 +116,12 @@ int main(int argc, char **argv) {
             // Открываем канал для записи
             int fd2 = open(pipe_path, O_WRONLY);
             if (fd2 == -1) {
-
                 std::cerr << "Ошибка открытия канала" << std::endl;
                 return 1;
             }
             std::string angleByString = std::to_string(angle);
-            write(fd, angleByString.c_str(), angleByString.length());
-            close(fd);
+            write(fd2, angleByString.c_str(), angleByString.length());
+            close(fd2);
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
