@@ -106,7 +106,11 @@ int main(int argc, char **argv) {
     const char* pipe_path = "/tmp/myapp_pipe";
 
     // Создаем канал
-    mkfifo(pipe_path, 0666);
+   // mkfifo(pipe_path, 0666);
+    if ( mkfifo(pipe_path, 0777) ) {
+        perror("mkfifo");
+        return 1;
+    }
     while(true){
         if (fd != -1 && reader != nullptr) {
            float angle = 0;
@@ -114,7 +118,7 @@ int main(int argc, char **argv) {
                 std::cout << angle << std::endl;
             }
             // Открываем канал для записи
-            int fd2 = open(pipe_path, O_WRONLY | O_NONBLOCK);
+            int fd2 = open(pipe_path, O_WRONLY);
             if (fd2 == -1) {
                 std::cerr << "Ошибка открытия канала" << std::endl;
               //  return 1;
