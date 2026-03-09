@@ -86,7 +86,7 @@ float getAngleByPipe() {
         ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
         if (bytes > 0) {
             buffer[bytes] = '\0';
-            std::cout << "Получено: " << buffer << std::endl;
+       //     std::cout << "Получено: " << buffer << std::endl;
         }
         close(fd);
         return atof(buffer);
