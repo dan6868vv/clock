@@ -24,7 +24,10 @@ int main() {
 
         if (bytes > 0) {
             buffer[bytes] = '\0';
-            std::cout << "Получено: " << buffer << std::endl;
+         //   std::cout << "Получено: " << buffer << std::endl;
+           std::cout << "Получено: " << atof(buffer) << std::endl;
+        //   std::cout << atof(buffer) <<
+            std:: cout << "Size: " << sizeof(atof(buffer)) << std::endl;
         }
 
         close(fd);

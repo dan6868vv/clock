@@ -59,10 +59,42 @@
 #ifdef __unix__
     #include "/home/andrey/raylib/src/raylib.h"
     #include "/home/andrey/raylib/src/raymath.h"
+    #include <fcntl.h>
+    #include <unistd.h>
+    #include <sys/stat.h>
 #elif defined(_WIN64)
     #include <cstdio>
     #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
     #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
+#endif
+
+#ifdef __unix__
+float getAngleByPipe() {
+    const char* pipe_path = "/tmp/myapp_pipe";
+    // Создаем канал
+    mkfifo(pipe_path, 0666);
+   // std::cout << "Читатель запущен. Ожидание данных..." << std::endl;
+    bool flag = true;
+    while (flag) {
+        int fd = open(pipe_path, O_RDONLY);
+        if (fd == -1) {
+            perror("open");
+            sleep(1);
+            continue;
+        }
+        char buffer[1024];
+        ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+        if (bytes > 0) {
+            buffer[bytes] = '\0';
+            std::cout << "Получено: " << buffer << std::endl;
+            //GOTO..//
+
+        }
+        close(fd);
+    }
+
+    return 0;
+}
 #endif
 int main() {
    InitWindow(800, 800, "3D Clock");
@@ -86,25 +118,31 @@ int main() {
     camera.fovy = 90.0f;
 
     float rotation = 0.0f;
-
+    float angle = 0;
     while (!WindowShouldClose()) {
         // Проверяем нажатие ESC для выхода из полноэкранного режима
-        if (IsKeyPressed(KEY_SPACE) && isFullscreen) {
-            ToggleFullscreen(); // Выходим из полноэкранного режима
-            SetWindowSize(500,500);
-            isFullscreen = false;
-        }
+        // if (IsKeyPressed(KEY_SPACE) && isFullscreen) {
+        //     ToggleFullscreen(); // Выходим из полноэкранного режима
+        //     SetWindowSize(500,500);
+        //     isFullscreen = false;
+        // }
        // RestoreWindow();
         // Альтернативный вариант: повторное нажатие ESC для переключения туда-обратно
         // if (IsKeyPressed(KEY_ESCAPE)) {
         //     ToggleFullscreen();
         //     isFullscreen = !isFullscreen;
         // }
-
         rotation -= 0.1f; // скорость вращения
 
+#ifdef __unix__
+        angle = getAngleByPipe();
+#elif defined(_WIN64)
+        angle += 1;
+#endif
+
         // ВАЖНО: применяем поворот ко ВСЕЙ модели сразу
-        needle.transform = MatrixRotateX(DEG2RAD * rotation); // вращение вокруг X
+    //    needle.transform = MatrixRotateX(DEG2RAD * rotation); // вращение вокруг X
+        needle.transform = MatrixRotateX(DEG2RAD * angle); // вращение вокруг X
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
