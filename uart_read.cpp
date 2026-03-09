@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <wiringSerial.h>
 #include <wiringPi.h>
-//#include <fstream>
+#include <fstream>
 //#include <fcntl.h>
 //#include <unistd.h>
 //#include <fcntl.h>
@@ -17,11 +17,15 @@
 //#include <fstream>  // Для чтения конфигурационного файла
 //#include <map>      // Для хранения пар ключ-значение из конфига
 
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <string.h>
 #include <stdio.h>
 
+#include <fcntl.h>
+#include <sys/stat.h>
+//#include <sys/types.h>
+#include <unistd.h> // for read() and write()
 
 #define FLOAT_TO_INT(x) ((x)>=0.0f?(int)((x)+0.5f):(int)((x)-0.5f))
 
