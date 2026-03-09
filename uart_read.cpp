@@ -3,11 +3,11 @@
 //#include <sstream>
 //#include <vector>
 #include <cstring>
-//#include <cmath>
+#include <cmath>
 #include <errno.h>
 #include <wiringSerial.h>
 #include <wiringPi.h>
-#include <fstream>
+//#include <fstream>
 #include <fcntl.h>
 #include <unistd.h>
 #include <fcntl.h>
