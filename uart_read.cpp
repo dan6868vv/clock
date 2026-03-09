@@ -127,25 +127,24 @@ int main(int argc, char **argv) {
         if (fd != -1 && reader != nullptr) {
             float angle = 0;
             bool flag = reader->readFloat(angle);
-            std::cout << flag << std::endl;
-            std::cout << reader << std::endl;
-            std::cout << angle << std::endl;
+
             if (flag) {
                 std::cout << angle << std::endl;
             }
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
 
-            if ((fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK))==-1) {
+        //    if ((fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK))==-1) {
+            if ((fd2 = open(pipe_path.c_str(), O_WRONLY))==-1) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
                 perror("open");
               //  return 1;
             } else{
-                std::cout << "ELSE" << std::endl;
-               // std::string angleByString = std::to_string(angle);
-                std::string angleByString = "Danila";
-                std::cout << angleByString << std::endl;
-              //  write(fd2, angleByString.c_str(), angleByString.length());
+             //   std::cout << "ELSE" << std::endl;
+                std::string angleByString = std::to_string(angle);
+               // std::string angleByString = "Danila";
+               // std::cout << angleByString << std::endl;
+                write(fd2, angleByString.c_str(), angleByString.length());
                 close(fd2);
             }
         } else {
