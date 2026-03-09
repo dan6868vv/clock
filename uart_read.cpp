@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
     std::cout << "Before if (mkfifo(pipe_path, 0666) ) {" << std::endl;
     // Создаем канал
    // mkfifo(pipe_path, 0666);
-    if (mkfifo(pipe_path, 0666)) {
+    if (mkfifo(pipe_path.c_str(), 0666)) {
         perror("mkfifo");
         return 1;
     }
