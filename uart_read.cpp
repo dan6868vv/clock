@@ -117,7 +117,11 @@ int main(int argc, char **argv) {
     while(true){
         if (fd != -1 && reader != nullptr) {
            float angle = 0;
-            if (reader->readFloat(angle)) {
+            bool flag = reader->readFloat(angle);
+            std::cout << flag << std::endl;
+            std::cout << reader << std::endl;
+            std::cout << angle << std::endl;
+            if (flag) {
                 std::cout << angle << std::endl;
             }
             std::cout << "121 str" << std::endl;
