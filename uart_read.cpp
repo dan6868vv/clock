@@ -55,6 +55,7 @@ public:
 
     // Читает и пытается преобразовать в число
     bool readFloat(float &value) {
+    std::cout << "In readFloat" <<std::endl;
         std::string line;
         if (readLine(line)) {
             try {
@@ -138,7 +139,7 @@ int main(int argc, char **argv) {
             std::cout << "angle = " << angle << std::endl;
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
-
+/*
         //    if ((fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK))==-1) {
             if ((fd2 = open(pipe_path.c_str(), O_WRONLY))==-1) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
@@ -151,7 +152,7 @@ int main(int argc, char **argv) {
                // std::cout << angleByString << std::endl;
                 write(fd2, angleByString.c_str(), angleByString.length());
                 close(fd2);
-            }
+            }*/
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
