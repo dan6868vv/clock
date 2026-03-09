@@ -116,15 +116,13 @@ int main(int argc, char **argv) {
     reader = new UARTLineReader(fd);
   //  const char* pipe_path = "/tmp/myapp_pipe";
     std::string pipe_path = "/tmp/myapp_pipe";
-    std::cout << "Before if (mkfifo(pipe_path, 0666) ) {" << std::endl;
     // Создаем канал
    // mkfifo(pipe_path, 0666);
-    if (mkfifo(pipe_path.c_str(), 0666) == -1 && errno != EEXIST) {
+    if (mkfifo(pipe_path.c_str(), 0777) == -1 && errno != EEXIST) {
         perror("mkfifo");
         return 1;
     }
     int fd2 = -1;
-    std::cout << "Before while" << std::endl;
     while(true){
         if (fd != -1 && reader != nullptr) {
             float angle = 0;
@@ -135,13 +133,11 @@ int main(int argc, char **argv) {
             if (flag) {
                 std::cout << angle << std::endl;
             }
-            std::cout << "121 str" << std::endl;
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
 
             if ((fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK))==-1) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
-                std::cout << "126 str" << std::endl;
                 perror("open");
               //  return 1;
             } else{
