@@ -133,12 +133,12 @@ int main(int argc, char **argv) {
             if (flag) {
                 std::cout << angle << std::endl;
             }
-        if(fd2 != -1){
-            std::string angleByString = std::to_string(angle);
-            // std::string angleByString = "Danila";
-             std::cout << angleByString << std::endl;
-             write(fd2, angleByString.c_str(), angleByString.length());
-        }
+            if(fd2 != -1){
+                std::string angleByString = std::to_string(angle);
+                // std::string angleByString = "Danila";
+                 std::cout << angleByString << std::endl;
+                 write(fd2, angleByString.c_str(), angleByString.length());
+            }
 
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
@@ -155,7 +155,7 @@ int main(int argc, char **argv) {
                // std::cout << angleByString << std::endl;
                // write(fd2, angleByString.c_str(), angleByString.length());
 
-            }
+           // }
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
