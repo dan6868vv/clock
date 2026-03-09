@@ -109,6 +109,8 @@ int main() {
     Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/needle_2.obj");
     Model yellow = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/yellow.obj");
     #elif defined(_WIN64)
+    // Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
+    // Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_needle.obj");
     Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
     Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_needle.obj");
     #endif
@@ -164,6 +166,8 @@ int main() {
     }
 
     UnloadModel(clock);
+    UnloadModel(needle);
+    UnloadModel(needle);
     CloseWindow();
     return 0;
 }
