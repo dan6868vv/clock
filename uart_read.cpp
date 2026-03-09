@@ -103,7 +103,8 @@ int main(int argc, char **argv) {
     // Создаем читатель UART (только если порт открыт)
     UARTLineReader *reader = nullptr;
     reader = new UARTLineReader(fd);
-    const char* pipe_path = "/tmp/myapp_pipe";
+  //  const char* pipe_path = "/tmp/myapp_pipe";
+    std::string pipe_path = "/tmp/myapp_pipe";
     std::cout << "Before if (mkfifo(pipe_path, 0666) ) {" << std::endl;
     // Создаем канал
    // mkfifo(pipe_path, 0666);
@@ -122,7 +123,7 @@ int main(int argc, char **argv) {
             std::cout << "121 str" << std::endl;
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
-            if ((fd2 = open(pipe_path, O_WRONLY))<=0) {
+            if ((fd2 = open(pipe_path.c_str(), O_WRONLY))<=0) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
                 std::cout << "126 str" << std::endl;
                 perror("open");
