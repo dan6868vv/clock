@@ -62,6 +62,7 @@
     #include <fcntl.h>
     #include <unistd.h>
     #include <sys/stat.h>
+    #include <stdio.h>
 #elif defined(_WIN64)
     #include <cstdio>
     #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
