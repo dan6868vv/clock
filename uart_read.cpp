@@ -104,24 +104,27 @@ int main(int argc, char **argv) {
     UARTLineReader *reader = nullptr;
     reader = new UARTLineReader(fd);
     const char* pipe_path = "/tmp/myapp_pipe";
-
+    std::cout << "Before if (mkfifo(pipe_path, 0666) ) {" << std::endl;
     // Создаем канал
    // mkfifo(pipe_path, 0666);
-    if (mkfifo(pipe_path, 0666) ) {
+    if (mkfifo(pipe_path, 0666)) {
         perror("mkfifo");
         return 1;
     }
     int fd2;
+    std::cout << "Before while" << std::endl;
     while(true){
         if (fd != -1 && reader != nullptr) {
            float angle = 0;
             if (reader->readFloat(angle)) {
                 std::cout << angle << std::endl;
             }
+            std::cout << "121 str" << std::endl;
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
             if ((fd2 = open(pipe_path, O_WRONLY))<=0) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
+                std::cout << "126 str" << std::endl;
                 perror("open");
               //  return 1;
             } else{
