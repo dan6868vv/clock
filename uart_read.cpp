@@ -17,15 +17,12 @@
 //#include <fstream>  // Для чтения конфигурационного файла
 //#include <map>      // Для хранения пар ключ-значение из конфига
 
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <string.h>
 #include <stdio.h>
-
+#include <string.h>
 #include <fcntl.h>
 #include <sys/stat.h>
-//#include <sys/types.h>
-#include <unistd.h> // for read() and write()
+#include <sys/types.h>
+#include <unistd.h>
 
 #define FLOAT_TO_INT(x) ((x)>=0.0f?(int)((x)+0.5f):(int)((x)-0.5f))
 
@@ -124,10 +121,10 @@ int main(int argc, char **argv) {
     }
     int fd2 = -1;
     while(true){
+        std::cout << "fd = " << fd << std::endl;
         if (fd != -1 && reader != nullptr) {
             float angle = 0;
             bool flag = reader->readFloat(angle);
-
             if (flag) {
                 std::cout << angle << std::endl;
             }
