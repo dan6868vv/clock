@@ -59,10 +59,11 @@
 #ifdef __unix__
     #include "/home/andrey/raylib/src/raylib.h"
     #include "/home/andrey/raylib/src/raymath.h"
-#endif _WIN64
+#elif defined(_WIN64)
     #include <cstdio>
     #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
     #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
+#endif
 int main() {
    InitWindow(800, 800, "3D Clock");
 
@@ -70,12 +71,13 @@ int main() {
     bool isFullscreen = true;
   //  ToggleFullscreen(); // Включаем полноэкранный режим
 
-    // Загружаем модель
-    // Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/TV_46.obj");
-    // Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/tv_45/strelka.obj");
-
-    Model clock = LoadModel("/home/andrey/qwer/clock/TV_46_for_rpi.obj");
-    Model needle = LoadModel("/home/andrey/qwer/clock/tv_45/strelka.obj");
+    #ifdef __unix__
+    Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_frame.obj");
+    Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_needle.obj");
+    #elif defined(_WIN64)
+    Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
+    Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_needle.obj");
+    #endif
 
     Camera3D camera = { 0 };
     camera.position = (Vector3){ 45.0f, 0.0f, 0.0f };
