@@ -125,10 +125,11 @@ int main(int argc, char **argv) {
                 perror("open");
               //  return 1;
             } else{
+                std::cout << "ELSE" << std::endl;
                // std::string angleByString = std::to_string(angle);
                 std::string angleByString = "Danila";
                 std::cout << angleByString << std::endl;
-                write(fd2, angleByString.c_str(), angleByString.length());
+              //  write(fd2, angleByString.c_str(), angleByString.length());
                 close(fd2);
             }
         } else {
