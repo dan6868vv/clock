@@ -87,12 +87,10 @@ float getAngleByPipe() {
         if (bytes > 0) {
             buffer[bytes] = '\0';
             std::cout << "Получено: " << buffer << std::endl;
-            //GOTO..//
-
         }
         close(fd);
+        return atof(buffer);
     }
-
     return 0;
 }
 #endif
