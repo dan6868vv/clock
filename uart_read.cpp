@@ -2,20 +2,27 @@
 #include <string>
 //#include <sstream>
 //#include <vector>
-#include <cstring>
+//#include <cstring>
 #include <cmath>
 #include <errno.h>
 #include <wiringSerial.h>
 #include <wiringPi.h>
 //#include <fstream>
-#include <fcntl.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/stat.h>
+//#include <fcntl.h>
+//#include <unistd.h>
+//#include <fcntl.h>
+//#include <unistd.h>
+//#include <sys/stat.h>
 //#include <SFML/Graphics.hpp>
 //#include <fstream>  // Для чтения конфигурационного файла
 //#include <map>      // Для хранения пар ключ-значение из конфига
+
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <string.h>
+#include <stdio.h>
+
+
 #define FLOAT_TO_INT(x) ((x)>=0.0f?(int)((x)+0.5f):(int)((x)-0.5f))
 
 
