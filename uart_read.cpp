@@ -111,6 +111,7 @@ int main(int argc, char **argv) {
         perror("mkfifo");
         return 1;
     }
+    int fd2;
     while(true){
         if (fd != -1 && reader != nullptr) {
            float angle = 0;
@@ -118,7 +119,7 @@ int main(int argc, char **argv) {
                 std::cout << angle << std::endl;
             }
             // Открываем канал для записи
-            int fd2 = open(pipe_path, O_WRONLY);
+           // int fd2 = open(pipe_path, O_WRONLY);
             if ((fd2 = open(pipe_path, O_WRONLY))<=0) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
                 perror("open");
