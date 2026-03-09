@@ -116,25 +116,25 @@ int main(int argc, char **argv) {
     std::string pipe_path = "/tmp/myapp_pipe";
     // Создаем канал
    // mkfifo(pipe_path, 0666);
-    if (mkfifo(pipe_path.c_str(), 0777) == -1 && errno != EEXIST) {
+   /* if (mkfifo(pipe_path.c_str(), 0777) == -1 && errno != EEXIST) {
         perror("mkfifo");
         return 1;
-    }
-    int fd2 = -1;
+    }*/
+   // int fd2 = -1;
     while(true){
-        std::cout << "fd = " << fd << std::endl;
-        std::cout << "reader = " << reader << std::endl;
-        std::cout << "Before if " << std::endl;
+     //   std::cout << "fd = " << fd << std::endl;
+     //   std::cout << "reader = " << reader << std::endl;
+     //   std::cout << "Before if " << std::endl;
         if (fd != -1 && reader != nullptr) {
-        std::cout<< "After if " << std::endl;
+     //   std::cout<< "After if " << std::endl;
 
             float angle = 0;
-            std::cout << "angle = " << angle << std::endl;
+      //      std::cout << "angle = " << angle << std::endl;
             bool flag = reader->readFloat(angle);
-            std::cout << "flag = " << flag << std::endl;
+      //      std::cout << "flag = " << flag << std::endl;
             if (flag) {
                 std::cout << angle << std::endl;
-                std::cout << "In if(flag); angle = " << angle << std::endl;
+       //         std::cout << "In if(flag); angle = " << angle << std::endl;
             }
             std::cout << "angle = " << angle << std::endl;
             // Открываем канал для записи
