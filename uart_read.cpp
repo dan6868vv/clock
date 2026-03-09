@@ -116,43 +116,46 @@ int main(int argc, char **argv) {
     std::string pipe_path = "/tmp/myapp_pipe";
     // Создаем канал
    // mkfifo(pipe_path, 0666);
-   /* if (mkfifo(pipe_path.c_str(), 0777) == -1 && errno != EEXIST) {
+    if (mkfifo(pipe_path.c_str(), 0777) == -1 && errno != EEXIST) {
         perror("mkfifo");
         return 1;
-    }*/
-   // int fd2 = -1;
+    }
+    int fd2 = open(pipe_path.c_str(), O_WRONLY);
+    if (fd2 == -1) {
+        std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
+        perror("open");
+        //  return 1;
+    }
     while(true){
-     //   std::cout << "fd = " << fd << std::endl;
-     //   std::cout << "reader = " << reader << std::endl;
-     //   std::cout << "Before if " << std::endl;
         if (fd != -1 && reader != nullptr) {
-     //   std::cout<< "After if " << std::endl;
-
             float angle = 0;
-      //      std::cout << "angle = " << angle << std::endl;
             bool flag = reader->readFloat(angle);
-      //      std::cout << "flag = " << flag << std::endl;
             if (flag) {
                 std::cout << angle << std::endl;
-                std::cout << "In if(flag); angle = " << angle << std::endl;
             }
-       //     std::cout << "angle = " << angle << std::endl;
+        if(fd2 != -1){
+            std::string angleByString = std::to_string(angle);
+            // std::string angleByString = "Danila";
+             std::cout << angleByString << std::endl;
+             write(fd2, angleByString.c_str(), angleByString.length());
+        }
+
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
-/*
-        //    if ((fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK))==-1) {
-            if ((fd2 = open(pipe_path.c_str(), O_WRONLY))==-1) {
+
+       //     if ((fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK))==-1) {
+           // if ((fd2 = open(pipe_path.c_str(), O_WRONLY))==-1) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
-                perror("open");
+           //     perror("open");
               //  return 1;
-            } else{
+          //  } else{
              //   std::cout << "ELSE" << std::endl;
-                std::string angleByString = std::to_string(angle);
+              //  std::string angleByString = std::to_string(angle);
                // std::string angleByString = "Danila";
                // std::cout << angleByString << std::endl;
-                write(fd2, angleByString.c_str(), angleByString.length());
-                close(fd2);
-            }*/
+               // write(fd2, angleByString.c_str(), angleByString.length());
+
+            }
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
@@ -164,6 +167,7 @@ int main(int argc, char **argv) {
     }
     if (fd != -1) {
         serialClose(fd);
+        close(fd2);
         std::cout << "Порт закрыт" << std::endl;
     }
 
