@@ -55,7 +55,7 @@ public:
 
     // Читает и пытается преобразовать в число
     bool readFloat(float &value) {
-    std::cout << "In readFloat" <<std::endl;
+  //  std::cout << "In readFloat" <<std::endl;
         std::string line;
         if (readLine(line)) {
             try {
@@ -134,9 +134,9 @@ int main(int argc, char **argv) {
       //      std::cout << "flag = " << flag << std::endl;
             if (flag) {
                 std::cout << angle << std::endl;
-       //         std::cout << "In if(flag); angle = " << angle << std::endl;
+                std::cout << "In if(flag); angle = " << angle << std::endl;
             }
-            std::cout << "angle = " << angle << std::endl;
+       //     std::cout << "angle = " << angle << std::endl;
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
 /*
