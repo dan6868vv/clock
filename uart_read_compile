@@ -7,11 +7,12 @@ SOURCES = uart_read.cpp
 # Компилятор и флаги
 CXX = g++
 CXXFLAGS = -O2 -Wall
-LDFLAGS = -lwiringPi -lsfml-graphics -lsfml-window -lsfml-system
+#LDFLAGS = -lwiringPi -lsfml-graphics -lsfml-window -lsfml-system
 
 # Правило сборки
 $(TARGET): $(SOURCES)
 	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCES) $(LDFLAGS)
+#	$(CXX) $(CXXFLAGS) -o $(TARGET) $(SOURCES) $(LDFLAGS)
 
 # Очистка
 clean:

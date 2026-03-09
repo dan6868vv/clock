@@ -10,6 +10,9 @@
 #include <fstream>
 #include <fcntl.h>
 #include <unistd.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
 //#include <SFML/Graphics.hpp>
 #include <fstream>  // Для чтения конфигурационного файла
 #include <map>      // Для хранения пар ключ-значение из конфига
