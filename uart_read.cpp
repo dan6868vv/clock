@@ -114,7 +114,7 @@ int main(int argc, char **argv) {
                 std::cout << angle << std::endl;
             }
             // Открываем канал для записи
-            int fd2 = open(pipe_path, O_WRONLY);
+            int fd2 = open(pipe_path, O_WRONLY | O_NONBLOCK);
             if (fd2 == -1) {
                 std::cerr << "Ошибка открытия канала" << std::endl;
               //  return 1;
