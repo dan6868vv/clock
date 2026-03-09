@@ -7,7 +7,7 @@
 #include <errno.h>
 #include <wiringSerial.h>
 #include <wiringPi.h>
-#include <fstream>
+//#include <fstream>
 //#include <fcntl.h>
 //#include <unistd.h>
 //#include <fcntl.h>
@@ -119,11 +119,11 @@ int main(int argc, char **argv) {
     std::cout << "Before if (mkfifo(pipe_path, 0666) ) {" << std::endl;
     // Создаем канал
    // mkfifo(pipe_path, 0666);
-    if (mkfifo(pipe_path.c_str(), 0666)) {
+    if (mkfifo(pipe_path.c_str(), 0666) == -1 && errno != EEXIST) {
         perror("mkfifo");
         return 1;
     }
-    int fd2;
+    int fd2 = -1;
     std::cout << "Before while" << std::endl;
     while(true){
         if (fd != -1 && reader != nullptr) {
@@ -139,7 +139,7 @@ int main(int argc, char **argv) {
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
 
-            if ((fd2 = open(pipe_path.c_str(), O_WRONLY))<=0) {
+            if ((fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK))==-1) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
                 std::cout << "126 str" << std::endl;
                 perror("open");
