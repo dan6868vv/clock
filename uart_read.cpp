@@ -1,9 +1,9 @@
 #include <iostream>
 #include <string>
-#include <sstream>
-#include <vector>
+//#include <sstream>
+//#include <vector>
 #include <cstring>
-#include <cmath>
+//#include <cmath>
 #include <errno.h>
 #include <wiringSerial.h>
 #include <wiringPi.h>
@@ -14,8 +14,8 @@
 #include <unistd.h>
 #include <sys/stat.h>
 //#include <SFML/Graphics.hpp>
-#include <fstream>  // Для чтения конфигурационного файла
-#include <map>      // Для хранения пар ключ-значение из конфига
+//#include <fstream>  // Для чтения конфигурационного файла
+//#include <map>      // Для хранения пар ключ-значение из конфига
 #define FLOAT_TO_INT(x) ((x)>=0.0f?(int)((x)+0.5f):(int)((x)-0.5f))
 
 
@@ -116,7 +116,7 @@ int main(int argc, char **argv) {
     std::cout << "Before while" << std::endl;
     while(true){
         if (fd != -1 && reader != nullptr) {
-           float angle = 0;
+            float angle = 0;
             bool flag = reader->readFloat(angle);
             std::cout << flag << std::endl;
             std::cout << reader << std::endl;
@@ -127,6 +127,7 @@ int main(int argc, char **argv) {
             std::cout << "121 str" << std::endl;
             // Открываем канал для записи
            // int fd2 = open(pipe_path, O_WRONLY);
+
             if ((fd2 = open(pipe_path.c_str(), O_WRONLY))<=0) {
                 //std::cerr << "Ошибка открытия канала" << std::endl;
                 std::cout << "126 str" << std::endl;
