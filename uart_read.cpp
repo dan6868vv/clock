@@ -114,9 +114,7 @@ int main(int argc, char **argv) {
     reader = new UARTLineReader(fd);
   //  const char* pipe_path = "/tmp/myapp_pipe";
     std::string pipe_path = "/tmp/myapp_pipe";
-    // Создаем канал
-   // mkfifo(pipe_path, 0666);
-    if (mkfifo(pipe_path.c_str(), 0777) == -1 && errno != EEXIST) {
+    if (mkfifo(pipe_path.c_str(), 0666) == -1 && errno != EEXIST) {
         perror("mkfifo");
         return 1;
     }
@@ -124,7 +122,6 @@ int main(int argc, char **argv) {
     if (fd2 == -1) {
         std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
         perror("open");
-        //  return 1;
     }
     while(true){
         if (fd != -1 && reader != nullptr) {
@@ -139,23 +136,6 @@ int main(int argc, char **argv) {
                  std::cout << angleByString << std::endl;
                  write(fd2, angleByString.c_str(), angleByString.length());
             }
-
-            // Открываем канал для записи
-           // int fd2 = open(pipe_path, O_WRONLY);
-
-       //     if ((fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK))==-1) {
-           // if ((fd2 = open(pipe_path.c_str(), O_WRONLY))==-1) {
-                //std::cerr << "Ошибка открытия канала" << std::endl;
-           //     perror("open");
-              //  return 1;
-          //  } else{
-             //   std::cout << "ELSE" << std::endl;
-              //  std::string angleByString = std::to_string(angle);
-               // std::string angleByString = "Danila";
-               // std::cout << angleByString << std::endl;
-               // write(fd2, angleByString.c_str(), angleByString.length());
-
-           // }
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
