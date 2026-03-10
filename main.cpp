@@ -49,7 +49,7 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     mkfifo(pipe_path, 0666);
    // bool flag = true;
     //  while (flag) {
-    int fd = open(pipe_path, O_RDONLY);
+    int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
     if (fd == -1) {
         perror("open");
         return ;
@@ -133,7 +133,8 @@ int main() {
     importModels(jsonMapTarget, modelMap);
     jsonMapCurrent = jsonMapTarget;
     getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
-#elif defined(_WIN64)
+
+    #elif defined(_WIN64)
     float angle = 0;
     angle += 1;
 #endif
@@ -143,14 +144,14 @@ int main() {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
-#ifdef __unix__
+//#ifdef __unix__
 
         getJsonByPipe(jsonMapTarget);
 
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
-            if(jsonMapDifferent[it.first]==0)
-                continue;
+            //if(jsonMapDifferent[it.first]==0)
+            //    continue;
             jsonMapCurrent[it.first] += 0.1f * jsonMapDifferent[it.first];
             it.second.transform =
                     MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
