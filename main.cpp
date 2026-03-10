@@ -20,10 +20,10 @@
 
 #ifdef __unix__
 float getAngleByPipe() {
-    const char* pipe_path = "/tmp/myapp_pipe";
+    const char *pipe_path = "/tmp/myapp_pipe";
     // Создаем канал
     mkfifo(pipe_path, 0666);
-   // std::cout << "Читатель запущен. Ожидание данных..." << std::endl;
+    // std::cout << "Читатель запущен. Ожидание данных..." << std::endl;
     bool flag = true;
     while (flag) {
         int fd = open(pipe_path, O_RDONLY);
@@ -36,7 +36,7 @@ float getAngleByPipe() {
         ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
         if (bytes > 0) {
             buffer[bytes] = '\0';
-       //     std::cout << "Получено: " << buffer << std::endl;
+            //     std::cout << "Получено: " << buffer << std::endl;
         }
         close(fd);
         return atof(buffer);
@@ -44,41 +44,39 @@ float getAngleByPipe() {
     return 0;
 }
 
-bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, std::string &lastLine) {
-    const char* pipe_path = "/tmp/myapp_pipe";
+void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
+    const char *pipe_path = "/tmp/myapp_pipe";
     mkfifo(pipe_path, 0666);
-    bool flag = true;
-    while (flag) {
-        int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
-        if (fd == -1) {
-            perror("open");
-            break;
-        }
-        char buffer[1024];
-        ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
-        if (bytes > 0) {
-            buffer[bytes] = '\0';
-        }
-        close(fd);
-
-        std::string buff = std::string(buffer);
-        if(lastLine == buff)
-            return false;
-        lastLine = buff;
-        std::stringstream ss(buff);
-        std::string item;
-        while (std::getline(ss, item, ',')) {
-            size_t pos = item.find(':');
-            if (pos != std::string::npos) {
-                std::string key = item.substr(0, pos);
-                if(key == "id" && item.substr(pos + 1)!=__id)
-                    return false;
-                jsonMap[key] = stof(item.substr(pos + 1));
-            }
-        }
-        break;
+   // bool flag = true;
+    //  while (flag) {
+    int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
+    if (fd == -1) {
+        perror("open");
+        return ;
     }
-    return true;
+    char buffer[1024];
+    ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+    if (bytes > 0) {
+        buffer[bytes] = '\0';
+    }
+    close(fd);
+
+    std::string buff = std::string(buffer);
+
+    std::stringstream ss(buff);
+    std::string item;
+    while (std::getline(ss, item, ',')) {
+        size_t pos = item.find(':');
+        if (pos != std::string::npos) {
+            std::string key = item.substr(0, pos);
+            if (key == "id" && item.substr(pos + 1) != __id)
+                return ;
+            jsonMap[key] = stof(item.substr(pos + 1));
+        }
+    }
+    // break;
+    //  }
+ //   return true;
 }
 #endif
 
@@ -131,7 +129,7 @@ int main() {
     std::unordered_map<std::string, Model> modelMap;
     std::string line;
 #ifdef __unix__
-    getJsonByPipe(jsonMapTarget,line);
+    getJsonByPipe(jsonMapTarget);
     importModels(jsonMapTarget, modelMap);
     jsonMapCurrent = jsonMapTarget;
     getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
@@ -147,7 +145,7 @@ int main() {
         BeginMode3D(camera);
 #ifdef __unix__
 
-        getJsonByPipe(jsonMapTarget,line);
+        getJsonByPipe(jsonMapTarget);
 
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
