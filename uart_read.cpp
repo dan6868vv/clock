@@ -89,6 +89,22 @@ void readUartFloatPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
     }
 }
 
+void readUsrtStringPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
+    std::string json = "";
+    if (reader->readJSON(json)) {
+        std::cout << json << std::endl;
+        int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+        if (fd2 == -1) {
+            std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
+            perror("open");
+        }
+        if ((write(fd2, json.c_str(), json.length())) == -1){
+            perror("write");
+        }
+        close(fd2);
+    }
+}
+
 int main(int argc, char **argv) {
     // Параметры по умолчанию
     std::string port = "/dev/serial0";
@@ -131,7 +147,8 @@ int main(int argc, char **argv) {
 
     while(true){
         if (fd != -1 && reader != nullptr) {
-            readUartFloatPushItToPipe(reader, pipe_path);
+        //    readUartFloatPushItToPipe(reader, pipe_path);
+            readUsrtStringPushItToPipe(reader, pipe_path);
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
