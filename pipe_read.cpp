@@ -30,7 +30,7 @@ int main() {
                 std::cout << buffer[i];
             }
             std::cout << std::endl;
-            std::cout << "Получено: " << std::str(buffer) << std::endl;
+            std::cout << "Получено: " << std::string(buffer) << std::endl;
             // std::cout << "Получено: " << atof(buffer) << std::endl;
    //         std::cout << "Size: " << sizeof(atof(buffer)) << std::endl;
         }
