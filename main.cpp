@@ -128,7 +128,13 @@ int main() {
 
     std::unordered_map<std::string, std::string> jsonMap;
     std::unordered_map<std::string, Model> modelMap;
-
+#ifdef __unix__
+    //        angle = getAngleByPipe();
+    getJsonByPipe(jsonMap);
+    importModels(jsonMap,modelMap);
+#elif defined(_WIN64)
+    angle += 1;
+#endif
     while (!WindowShouldClose()) {
 
         for(auto it:modelMap) {
@@ -155,13 +161,7 @@ int main() {
 
         DrawFPS(10, 10);
         EndDrawing();
-#ifdef __unix__
-//        angle = getAngleByPipe();
-        getJsonByPipe(jsonMap);
-        importModels(jsonMap,modelMap);
-#elif defined(_WIN64)
-        angle += 1;
-#endif
+
 
         for (auto i: jsonMap) {
             std::cout << i.first << ": " << i.second << std::endl;
