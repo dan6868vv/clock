@@ -70,9 +70,12 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
                 std::string key = item.substr(0, pos);
                // int value = std::stoi(item.substr(pos + 1));
                 jsonMap[key] = item.substr(pos + 1);
+
             }
         }
-
+        for(auto i:jsonMap) {
+            std::cout << i.first << ": " << i.second << std::endl;
+        }
     }
    // return 0;
 }
@@ -149,6 +152,7 @@ int main() {
 #elif defined(_WIN64)
         angle += 1;
 #endif
+
         for(auto i:jsonMap) {
             std::cout << i.first << ": " << i.second << std::endl;
         }

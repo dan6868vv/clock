@@ -40,6 +40,13 @@
 				1,
 				2
 			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				3
+			]
 		}
 	],
 	"sources" : 
@@ -58,6 +65,11 @@
 			"backtrace" : 1,
 			"path" : "main.cpp",
 			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "clock_porgram_compile",
+			"sourceGroupIndex" : 1
 		}
 	],
 	"type" : "UTILITY"

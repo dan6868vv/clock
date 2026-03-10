@@ -17,6 +17,7 @@ add_custom_target(project_files SOURCES
         uart_read.cpp          # твой файл для форматирования
         pipe_read.cpp
         main.cpp
+        clock_program_compile
 )
 # Добавляем пути для заголовочных файлов (чтобы #include работали)
 target_include_directories(Arrow_Display PRIVATE
