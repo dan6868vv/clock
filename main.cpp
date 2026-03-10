@@ -49,12 +49,20 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     mkfifo(pipe_path, 0666);
    // bool flag = true;
     //  while (flag) {
+    auto start = std::chrono::high_resolution_clock::now();
+
+    // Засекаем конец
 
     int fd = open(pipe_path, O_RDONLY);
     if (fd == -1) {
         perror("open");
         return ;
     }
+    auto end = std::chrono::high_resolution_clock::now();
+    // Вычисляем длительность
+    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+    std::cout << "Время выполнения в функции: " << duration.count() << " мкс" << std::endl;
+    std::cout << "Время выполнения в функции: " << duration.count() / 1000.0 << " мс" << std::endl;
     char buffer[1024];
     ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
     if (bytes > 0) {
