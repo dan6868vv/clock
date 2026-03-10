@@ -158,6 +158,7 @@ int main() {
 #ifdef __unix__
 //        angle = getAngleByPipe();
         getJsonByPipe(jsonMap);
+        importModels(jsonMap,modelMap);
 #elif defined(_WIN64)
         angle += 1;
 #endif
