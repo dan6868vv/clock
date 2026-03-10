@@ -90,8 +90,11 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
 #elif defined(_WIN64)
         std::string filePath = "D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/";
 #endif
+        std::ostringstream oss;
+        oss << std::noshowpoint << id;  // Убираем десятичную точку, если число целое
+        std::string idStr = oss.str(); // "1"
         Model model = LoadModel(
-            (filePath + std::to_string(id) + "/" + i.first + ".obj").c_str());
+            (filePath + idStr + "/" + i.first + ".obj").c_str());
         modelMap[i.first] = model;
     }
     return true;
