@@ -143,7 +143,7 @@ int main() {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
-//#ifdef __unix__
+#ifdef __unix__
 
         getJsonByPipe(jsonMapTarget);
 
