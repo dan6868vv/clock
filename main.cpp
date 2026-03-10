@@ -149,7 +149,7 @@ int main() {
 
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
-            jsonMapCurrent[it.first] += 0.1f * jsonMapDifferent[it.first];
+            jsonMapCurrent[it.first] += 0.5f * jsonMapDifferent[it.first];
             it.second.transform =
                     MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
