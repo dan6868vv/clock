@@ -82,7 +82,7 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
 #endif
 
 bool importModels(std::unordered_map<std::string, std::string> jsonMap,
-                  std::unordered_map<std::string, Model> modelMap) {
+                  std::unordered_map<std::string, Model> &modelMap) {
     std::string id = jsonMap["id"];
     for (auto i: jsonMap) {
         if (i.first == "id")
@@ -136,10 +136,12 @@ int main() {
     angle += 1;
 #endif
     while (!WindowShouldClose()) {
-
+#ifdef __unix__
+        getJsonByPipe(jsonMap);
         for(auto it:modelMap) {
             it.second.transform = MatrixRotateX(DEG2RAD * stof(jsonMap[it.first]));
         }
+#endif
         //    needle.transform = MatrixRotateX(DEG2RAD * rotation); // вращение вокруг X
         //needle.transform = MatrixRotateX(DEG2RAD * angle); // вращение вокруг X
 
