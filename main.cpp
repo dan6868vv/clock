@@ -44,12 +44,12 @@ float getAngleByPipe() {
     return 0;
 }
 
-void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
+bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, std::string &lastLine) {
     const char* pipe_path = "/tmp/myapp_pipe";
     mkfifo(pipe_path, 0666);
     bool flag = true;
     while (flag) {
-        int fd = open(pipe_path, O_RDONLY);
+        int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
         if (fd == -1) {
             perror("open");
             break;
@@ -62,7 +62,9 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
         close(fd);
 
         std::string buff = std::string(buffer);
-
+        if(lastLine == buff)
+            return false;
+        lastLine = buff;
         std::stringstream ss(buff);
         std::string item;
         while (std::getline(ss, item, ',')) {
@@ -70,12 +72,13 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
             if (pos != std::string::npos) {
                 std::string key = item.substr(0, pos);
                 if(key == "id" && item.substr(pos + 1)!=__id)
-                    return;
+                    return false;
                 jsonMap[key] = stof(item.substr(pos + 1));
             }
         }
         break;
     }
+    return true;
 }
 #endif
 
@@ -135,13 +138,16 @@ int main() {
     float angle = 0;
     angle += 1;
 #endif
-
+    std::string line;
+    std::string lastLine;
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
-        #ifdef __unix__
-        getJsonByPipe(jsonMapTarget);
+#ifdef __unix__
+
+        getJsonByPipe(jsonMapTarget,line);
+
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
             jsonMapCurrent[it.first] += 0.1f * jsonMapDifferent[it.first];
