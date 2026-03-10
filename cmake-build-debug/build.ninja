@@ -76,6 +76,12 @@ build Arrow_Display.exe: CXX_EXECUTABLE_LINKER__Arrow_Display_Debug CMakeFiles/A
 
 
 #############################################
+# Utility command for project_files
+
+build project_files: phony
+
+
+#############################################
 # Utility command for edit_cache
 
 build CMakeFiles/edit_cache.util: CUSTOM_COMMAND

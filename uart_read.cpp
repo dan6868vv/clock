@@ -1,22 +1,11 @@
+//Thid code read uart and push it to pipe
+
 #include <iostream>
 #include <string>
-//#include <sstream>
-//#include <vector>
-//#include <cstring>
 #include <cmath>
 #include <errno.h>
 #include <wiringSerial.h>
 #include <wiringPi.h>
-//#include <fstream>
-//#include <fcntl.h>
-//#include <unistd.h>
-//#include <fcntl.h>
-//#include <unistd.h>
-//#include <sys/stat.h>
-//#include <SFML/Graphics.hpp>
-//#include <fstream>  // Для чтения конфигурационного файла
-//#include <map>      // Для хранения пар ключ-значение из конфига
-
 #include <stdio.h>
 #include <string.h>
 #include <fcntl.h>
@@ -55,7 +44,6 @@ public:
 
     // Читает и пытается преобразовать в число
     bool readFloat(float &value) {
-  //  std::cout << "In readFloat" <<std::endl;
         std::string line;
         if (readLine(line)) {
             try {
@@ -70,7 +58,36 @@ public:
         }
         return false;
     }
+
+	bool readJSON(std::string &json) {
+    //    std::string line;
+        if (readLine(json)) {
+            return true;
+        }
+        return false;
+    }
 };
+void readFloatFromUartPushItToPipe(){
+
+
+}
+
+void readUartFloatPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
+    float angle = 0;
+    if (reader->readFloat(angle)) {
+        std::cout << angle << std::endl;
+        int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+        if (fd2 == -1) {
+            std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
+            perror("open");
+        }
+        std::string angleByString = std::to_string(angle);
+        if ((write(fd2, angleByString.c_str(), angleByString.length())) == -1){
+            perror("write");
+        }
+        close(fd2);
+    }
+}
 
 int main(int argc, char **argv) {
     // Параметры по умолчанию
@@ -84,14 +101,9 @@ int main(int argc, char **argv) {
     if (argc > 2) {
         baudRate = std::stoi(argv[2]);
     }
-
-    std::cout << "======================================" << std::endl;
-    std::cout << "UART Gauge с PNG поддержкой" << std::endl;
-    std::cout << "\033[34mUART Gauge с PNG поддержкой\033[0m" << std::endl;
     std::cout << "======================================" << std::endl;
     std::cout << "Порт: " << port << std::endl;
     std::cout << "Скорость: " << baudRate << std::endl;
-    std::cout << "======================================" << std::endl;
 
     // Инициализация wiringPi
     if (wiringPiSetup() == -1) {
@@ -101,7 +113,6 @@ int main(int argc, char **argv) {
 
     // Открываем последовательный порт
     int fd = serialOpen(port.c_str(), baudRate);
-
     if (fd == -1) {
         std::cerr << "❌ Не удалось открыть порт: " << strerror(errno) << std::endl;
         std::cerr << "⚠️ Продолжаем в демо-режиме (без UART)..." << std::endl;
@@ -109,10 +120,9 @@ int main(int argc, char **argv) {
         std::cout << "✅ Порт открыт успешно. Ожидание данных..." << std::endl;
     }
 
-    // Создаем читатель UART (только если порт открыт)
+    // Создаем читатель UART
     UARTLineReader *reader = nullptr;
     reader = new UARTLineReader(fd);
-  //  const char* pipe_path = "/tmp/myapp_pipe";
     std::string pipe_path = "/tmp/myapp_pipe";
     if (mkfifo(pipe_path.c_str(), 0666) == -1 && errno != EEXIST) {
         perror("mkfifo");
@@ -121,29 +131,7 @@ int main(int argc, char **argv) {
 
     while(true){
         if (fd != -1 && reader != nullptr) {
-            float angle = 0;
-            bool flag = reader->readFloat(angle);
-            if (flag) {
-                std::cout << angle << std::endl;
-                int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
-           //     std::cout << "fd2 = " << fd2 << std::endl;
-                if (fd2 == -1) {
-                    std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
-                    perror("open");
-                }
-                std::string angleByString = std::to_string(angle);
-                if ((write(fd2, angleByString.c_str(), angleByString.length())) == -1){
-                perror("write");
-                }
-                close(fd2);
-            }
-
-        //    if(fd2 != -1){
-            //    std::string angleByString = std::to_string(angle);
-                // std::string angleByString = "Danila";
-              //   std::cout << angleByString << std::endl;
-          //       write(fd2, angleByString.c_str(), angleByString.length());
-        //    }
+            readUartFloatPushItToPipe(reader, pipe_path);
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
@@ -155,9 +143,7 @@ int main(int argc, char **argv) {
     }
     if (fd != -1) {
         serialClose(fd);
-
         std::cout << "Порт закрыт" << std::endl;
     }
-
     return 0;
 }
