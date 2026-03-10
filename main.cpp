@@ -53,7 +53,7 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
 
     // Засекаем конец
 
-    int fd = open(pipe_path, O_RDONLY);
+    int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
     if (fd == -1) {
         perror("open");
         return ;
