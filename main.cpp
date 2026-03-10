@@ -140,6 +140,7 @@ int main() {
         getJsonByPipe(jsonMap);
         for(auto it:modelMap) {
             it.second.transform = MatrixRotateX(DEG2RAD * stof(jsonMap[it.first]));
+            std::cout << "stof(jsonMap[it.first]): " << stof(jsonMap[it.first]);
         }
 #endif
         //    needle.transform = MatrixRotateX(DEG2RAD * rotation); // вращение вокруг X
