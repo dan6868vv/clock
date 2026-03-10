@@ -1,0 +1,31 @@
+# 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
+# File Created: 09.03.2026 14:56:31
+
+mtllib yellow.mtl
+
+#
+# object yelloy_101_5
+#
+
+v  -1.2556 10.1565 -0.2355
+v  -1.2556 10.0610 -1.4089
+v  -1.2556 32.7083 -3.2510
+v  -1.2556 32.8037 -2.0776
+# 4 vertices
+
+vn 0.0000 0.9967 -0.0811
+# 1 vertex normals
+
+vt 0.1400 0.0105 1.0000
+vt 0.8600 0.0105 1.0000
+vt 0.8600 0.9895 1.0000
+vt 0.1400 0.9895 1.0000
+# 4 texture coords
+
+o yelloy_101_5
+g yelloy_101_5
+usemtl yellow_plastic
+f 1/1/1 2/2/1 3/3/1 
+f 3/3/1 4/4/1 1/1/1 
+# 2 faces
+

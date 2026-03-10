@@ -75,11 +75,29 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
         // for(auto i:jsonMap) {
         //     std::cout << i.first << ": " << i.second << std::endl;
         // }
-        break; 
+        break;
     }
    // return 0;
 }
 #endif
+
+bool importModels(std::unordered_map<std::string, std::string> jsonMap,
+                  std::unordered_map<std::string, Model> modelMap) {
+    std::string id = jsonMap["id"];
+    for (auto i: jsonMap) {
+        if (i.first == "id")
+            continue;
+#ifdef __unix__
+        Model model = LoadModel(("/home/andrey/qwer/clock/_models_for_unix/" + id +"/" + i.first+ ".obj").c_str());
+        modelMap[i.first] = model;
+#elif defined(_WIN64)
+        Model model = LoadModel(("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/" + id +"/" + i.first + ".obj").c_str());
+        modelMap[i.first] = model;
+#endif
+    }
+    return true;
+}
+
 int main() {
     InitWindow(800, 800, "3D Clock");
 
@@ -90,8 +108,8 @@ int main() {
 #ifdef __unix__
     // Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_frame.obj");
  //    Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_needle.obj");
-    Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/scale.obj");
-    Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/needle_2.obj");
+ //   Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/scale.obj");
+ //   Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/needle_2.obj");
  //   Model yellow = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/yellow.obj");
 #elif defined(_WIN64)
     // Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
@@ -106,39 +124,30 @@ int main() {
     camera.up = (Vector3){0.0f, 2.0f, 0.0f};
     camera.fovy = 90.0f;
 
-    float rotation = 0.0f;
     float angle = 0;
 
     std::unordered_map<std::string, std::string> jsonMap;
+    std::unordered_map<std::string, Model> modelMap;
 
     while (!WindowShouldClose()) {
-        // Проверяем нажатие ESC для выхода из полноэкранного режима
-        // if (IsKeyPressed(KEY_SPACE) && isFullscreen) {
-        //     ToggleFullscreen(); // Выходим из полноэкранного режима
-        //     SetWindowSize(500,500);
-        //     isFullscreen = false;
-        // }
-        // RestoreWindow();
-        // Альтернативный вариант: повторное нажатие ESC для переключения туда-обратно
-        // if (IsKeyPressed(KEY_ESCAPE)) {
-        //     ToggleFullscreen();
-        //     isFullscreen = !isFullscreen;
-        // }
-        rotation -= 0.1f; // скорость вращения
 
-
-        // ВАЖНО: применяем поворот ко ВСЕЙ модели сразу
+        for(auto it:modelMap) {
+            it.second.transform = MatrixRotateX(DEG2RAD * stof(jsonMap[it.first]));
+        }
         //    needle.transform = MatrixRotateX(DEG2RAD * rotation); // вращение вокруг X
-        needle.transform = MatrixRotateX(DEG2RAD * angle); // вращение вокруг X
+        //needle.transform = MatrixRotateX(DEG2RAD * angle); // вращение вокруг X
 
         BeginDrawing();
         ClearBackground(RAYWHITE);
-
         BeginMode3D(camera);
 
         // Рисуем всю модель целиком
-        DrawModel(needle, (Vector3){0, 0, 0}, 1.0f, WHITE);
-        DrawModel(clock, (Vector3){0, 0, 0}, 1.0f, WHITE);
+
+        for(auto it: modelMap) {
+            DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
+        }
+      //  DrawModel(needle, (Vector3){0, 0, 0}, 1.0f, WHITE);
+      //  DrawModel(clock, (Vector3){0, 0, 0}, 1.0f, WHITE);
         //     DrawModel(yellow, (Vector3){0, 0, 0}, 1.0f, WHITE);
 
         DrawGrid(10, 1.0f);
@@ -153,14 +162,16 @@ int main() {
         angle += 1;
 #endif
 
-        for(auto i:jsonMap) {
+        for (auto i: jsonMap) {
             std::cout << i.first << ": " << i.second << std::endl;
         }
     }
-
-    UnloadModel(clock);
-    UnloadModel(needle);
-    //  UnloadModel(needle);
+    for(auto it:modelMap) {
+        UnloadModel(it.second);
+    }
+    // UnloadModel(clock);
+    // UnloadModel(needle);
+    // //  UnloadModel(needle);
     CloseWindow();
     return 0;
 }
