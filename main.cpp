@@ -92,7 +92,9 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
 bool importModels(std::unordered_map<std::string, float> jsonMap,
                   std::unordered_map<std::string, Model> &modelMap) {
     float id = jsonMap["id"];
+    std::cout << "In import models" <<std::endl;
     for (auto i: jsonMap) {
+        std::cout << i.first << ":" <<i.second <<std::endl;
         if (i.first == "id")
             continue;
 #ifdef __unix__
@@ -137,6 +139,7 @@ int main() {
     std::unordered_map<std::string, float> jsonMapDifferent;
     std::unordered_map<std::string, Model> modelMap;
     std::string line;
+
 #ifdef __unix__
     getJsonByPipe(jsonMapTarget);
     importModels(jsonMapTarget, modelMap);
@@ -165,6 +168,7 @@ int main() {
         std::cout << "Время выполнения: " << duration.count() << " мкс" << std::endl;
         std::cout << "Время выполнения: " << duration.count() / 1000.0 << " мс" << std::endl;
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
+
         for (auto &it: modelMap) {
             //if(jsonMapDifferent[it.first]==0)
             //    continue;
