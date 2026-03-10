@@ -134,10 +134,11 @@ int main() {
     float angle = 0;
     angle += 1;
 #endif
-    BeginDrawing();
-    ClearBackground(RAYWHITE);
-    BeginMode3D(camera);
+
     while (!WindowShouldClose()) {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        BeginMode3D(camera);
 #ifdef __unix__
         getJsonByPipe(jsonMapTarget);
         for (auto &it: modelMap) {
