@@ -44,7 +44,7 @@ float getAngleByPipe() {
     return 0;
 }
 
-void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
+void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     const char* pipe_path = "/tmp/myapp_pipe";
     mkfifo(pipe_path, 0666);
     bool flag = true;
