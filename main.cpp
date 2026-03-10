@@ -49,7 +49,8 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     mkfifo(pipe_path, 0666);
    // bool flag = true;
     //  while (flag) {
-    int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
+
+    int fd = open(pipe_path, O_RDONLY);
     if (fd == -1) {
         perror("open");
         return ;
@@ -145,9 +146,16 @@ int main() {
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
 #ifdef __unix__
-
+        auto start = std::chrono::high_resolution_clock::now();
         getJsonByPipe(jsonMapTarget);
+        // Засекаем конец
+        auto end = std::chrono::high_resolution_clock::now();
 
+        // Вычисляем длительность
+        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
+
+        std::cout << "Время выполнения: " << duration.count() << " мкс" << std::endl;
+        std::cout << "Время выполнения: " << duration.count() / 1000.0 << " мс" << std::endl;
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
             //if(jsonMapDifferent[it.first]==0)
