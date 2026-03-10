@@ -1,1 +1,1 @@
-g++ -D__unix__ main.cpp -o clock_program -I/home/andrey/raylib/src -L/home/andrey/raylib/src -lraylib -ldrm -lgbm -lEGL -lGLESv2 -lm -lpthread -ldl -lrt                                                                                                                                                                                                                                                     
+g++ -D__unix__ main.cpp -o clock_program -I/home/andrey/raylib/src -L/home/andrey/raylib/src -lraylib -ldrm -lgbm -lEGL -lGLESv2 -lm -lpthread -ldl -lrt    
