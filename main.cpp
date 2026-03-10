@@ -91,7 +91,7 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
         std::string filePath = "D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/";
 #endif
         std::ostringstream oss;
-        oss << std::noshowpoint << id;  // Убираем десятичную точку, если число целое
+        oss << std::noshowpoint << id; // Убираем десятичную точку, если число целое
         std::string idStr = oss.str(); // "1"
         Model model = LoadModel(
             (filePath + idStr + "/" + i.first + ".obj").c_str());
@@ -100,11 +100,11 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
     return true;
 }
 
-void getDiff(std::unordered_map<std::string, std::string> jsonMapTarget,
-             std::unordered_map<std::string, std::string> jsonMapCurrent,
+void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
+             std::unordered_map<std::string, float> jsonMapCurrent,
              std::unordered_map<std::string, float> &jsonMapDifferent) {
     for (auto itTarget: jsonMapTarget) {
-        jsonMapDifferent[itTarget.first] = std::stof(itTarget.second) - std::stof(jsonMapCurrent[itTarget.first]);
+        jsonMapDifferent[itTarget.first] = itTarget.second - jsonMapCurrent[itTarget.first];
     }
 }
 
@@ -130,6 +130,7 @@ int main() {
     getJsonByPipe(jsonMapTarget);
     importModels(jsonMapTarget, modelMap);
     jsonMapCurrent = jsonMapTarget;
+    getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
 #elif defined(_WIN64)
     float angle = 0;
     angle += 1;
@@ -139,11 +140,13 @@ int main() {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
-#ifdef __unix__
+        #ifdef __unix__
         getJsonByPipe(jsonMapTarget);
+        getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
+            jsonMapCurrent[it.first] += 0.1f * jsonMapDifferent[it.first];
             it.second.transform =
-                    MatrixRotateX(DEG2RAD * jsonMapCurrent[it.first]);
+                    MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
 #endif
