@@ -149,7 +149,9 @@ int main() {
 
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
-            jsonMapCurrent[it.first] += 0.5f * jsonMapDifferent[it.first];
+            if(jsonMapDifferent[it.first]==0)
+                continue;
+            jsonMapCurrent[it.first] += 0.1f * jsonMapDifferent[it.first];
             it.second.transform =
                     MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
             std::cout << "Draw " << it.first << " diffe: " << jsonMapDifferent[it.first] << std::endl;
