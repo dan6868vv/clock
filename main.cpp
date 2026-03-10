@@ -79,20 +79,20 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
 }
 #endif
 
-bool importModels(std::unordered_map<std::string, std::string> jsonMap,
+bool importModels(std::unordered_map<std::string, float> jsonMap,
                   std::unordered_map<std::string, Model> &modelMap) {
-    std::string id = jsonMap["id"];
+    float id = jsonMap["id"];
     for (auto i: jsonMap) {
         if (i.first == "id")
             continue;
 #ifdef __unix__
-        Model model = LoadModel(("/home/andrey/qwer/clock/_models_for_unix/" + id +"/" + i.first+ ".obj").c_str());
-        modelMap[i.first] = model;
+        std::string filePath = "/home/andrey/qwer/clock/_models_for_unix/";
 #elif defined(_WIN64)
-        Model model = LoadModel(
-            ("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/" + id + "/" + i.first + ".obj").c_str());
-        modelMap[i.first] = model;
+        std::string filePath = "D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/";
 #endif
+        Model model = LoadModel(
+            (filePath + std::to_string(id) + "/" + i.first + ".obj").c_str());
+        modelMap[i.first] = model;
     }
     return true;
 }
@@ -135,7 +135,7 @@ int main() {
     ClearBackground(RAYWHITE);
     BeginMode3D(camera);
     while (!WindowShouldClose()) {
-        #ifdef __unix__
+#ifdef __unix__
         getJsonByPipe(jsonMapTarget);
         for (auto &it: modelMap) {
             it.second.transform =
