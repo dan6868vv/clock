@@ -73,9 +73,9 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
 
             }
         }
-        for(auto i:jsonMap) {
-            std::cout << i.first << ": " << i.second << std::endl;
-        }
+        // for(auto i:jsonMap) {
+        //     std::cout << i.first << ": " << i.second << std::endl;
+        // }
     }
    // return 0;
 }
