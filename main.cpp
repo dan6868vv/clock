@@ -50,8 +50,7 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
         int fd = open(pipe_path, O_RDONLY);
         if (fd == -1) {
             perror("open");
-            sleep(1);
-            continue;
+            break;
         }
         char buffer[1024];
         ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
@@ -76,6 +75,7 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
         // for(auto i:jsonMap) {
         //     std::cout << i.first << ": " << i.second << std::endl;
         // }
+        break; 
     }
    // return 0;
 }
