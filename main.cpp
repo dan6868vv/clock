@@ -81,11 +81,7 @@ int main() {
         // }
         rotation -= 0.1f; // скорость вращения
 
-#ifdef __unix__
-        angle = getAngleByPipe();
-#elif defined(_WIN64)
-        angle += 1;
-#endif
+
 
         // ВАЖНО: применяем поворот ко ВСЕЙ модели сразу
     //    needle.transform = MatrixRotateX(DEG2RAD * rotation); // вращение вокруг X
@@ -100,7 +96,11 @@ int main() {
         DrawModel(needle, (Vector3){0, 0, 0}, 1.0f, WHITE);
         DrawModel(clock, (Vector3){0, 0, 0}, 1.0f, WHITE);
    //     DrawModel(yellow, (Vector3){0, 0, 0}, 1.0f, WHITE);
-
+#ifdef __unix__
+        angle = getAngleByPipe();
+#elif defined(_WIN64)
+        angle += 1;
+#endif
         DrawGrid(10, 1.0f);
         EndMode3D();
 
