@@ -143,7 +143,7 @@ int main() {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
-#ifdef __unix__
+//#ifdef __unix__
 
         getJsonByPipe(jsonMapTarget);
 
@@ -152,6 +152,8 @@ int main() {
             jsonMapCurrent[it.first] += 0.5f * jsonMapDifferent[it.first];
             it.second.transform =
                     MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
+            std::cout << "Draw " << it.first << " diffe: " << jsonMapDifferent[it.first] << std::endl;
+            std::cout << "Draw " << it.first << " angle: " << jsonMapCurrent[it.first] << std::endl;
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
 #endif
