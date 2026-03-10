@@ -12,8 +12,10 @@
 #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
 #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
 #endif
+#include <iostream>
 #include <unordered_map>
 #include <string>
+#include <sstream>
 #ifdef __unix__
 float getAngleByPipe() {
     const char* pipe_path = "/tmp/myapp_pipe";
@@ -57,10 +59,22 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
             buffer[bytes] = '\0';
         }
         close(fd);
-        //TODO
-        return atof(buffer);
+
+        std::string buff = std::string(buffer);
+
+        std::stringstream ss(buff);
+        std::string item;
+        while (std::getline(ss, item, ',')) {
+            size_t pos = item.find(':');
+            if (pos != std::string::npos) {
+                std::string key = item.substr(0, pos);
+               // int value = std::stoi(item.substr(pos + 1));
+                jsonMap[key] = item.substr(pos + 1);
+            }
+        }
+
     }
-    return 0;
+   // return 0;
 }
 #endif
 int main() {
@@ -130,10 +144,14 @@ int main() {
         DrawFPS(10, 10);
         EndDrawing();
 #ifdef __unix__
-        angle = getAngleByPipe();
+//        angle = getAngleByPipe();
+        getJsonByPipe(jsonMap);
 #elif defined(_WIN64)
         angle += 1;
 #endif
+        for(auto i:jsonMap) {
+            std::cout << i.first << ": " << i.second << std::endl;
+        }
     }
 
     UnloadModel(clock);
