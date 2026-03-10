@@ -16,6 +16,7 @@ add_executable(Arrow_Display main.cpp)
 add_custom_target(project_files SOURCES
         uart_read.cpp          # твой файл для форматирования
         pipe_read.cpp
+        main.cpp
 )
 # Добавляем пути для заголовочных файлов (чтобы #include работали)
 target_include_directories(Arrow_Display PRIVATE

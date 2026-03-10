@@ -37,7 +37,8 @@
 			"sourceIndexes" : 
 			[
 				0,
-				1
+				1,
+				2
 			]
 		}
 	],
@@ -51,6 +52,11 @@
 		{
 			"backtrace" : 1,
 			"path" : "pipe_read.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "main.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],
