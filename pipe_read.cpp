@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fcntl.h>
 #include <unistd.h>
+#include <string>
 #include <sys/stat.h>
 
 int main() {
@@ -24,7 +25,11 @@ int main() {
 
         if (bytes > 0) {
             buffer[bytes] = '\0';
-            std::cout << "Получено: " << buffer << std::endl;
+            std::cout << "Получено: ";
+            for(int i=0;i<bytes;i++) {
+                std::cout << buffer[i];
+            }
+            std::cout << std::endl;
             // std::cout << "Получено: " << atof(buffer) << std::endl;
    //         std::cout << "Size: " << sizeof(atof(buffer)) << std::endl;
         }
