@@ -129,8 +129,9 @@ int main() {
     std::unordered_map<std::string, float> jsonMapCurrent;
     std::unordered_map<std::string, float> jsonMapDifferent;
     std::unordered_map<std::string, Model> modelMap;
+    std::string line;
 #ifdef __unix__
-    getJsonByPipe(jsonMapTarget);
+    getJsonByPipe(jsonMapTarget,line);
     importModels(jsonMapTarget, modelMap);
     jsonMapCurrent = jsonMapTarget;
     getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
@@ -138,7 +139,7 @@ int main() {
     float angle = 0;
     angle += 1;
 #endif
-    std::string line;
+
     std::string lastLine;
     while (!WindowShouldClose()) {
         BeginDrawing();
