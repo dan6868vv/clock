@@ -138,7 +138,7 @@ int main() {
     while (!WindowShouldClose()) {
 #ifdef __unix__
         getJsonByPipe(jsonMap);
-        for(auto it:modelMap) {
+        for(auto& it:modelMap) {
             it.second.transform = MatrixRotateX(DEG2RAD * stof(jsonMap[it.first]));
             std::cout << "stof(jsonMap[it.first]): " << stof(jsonMap[it.first]);
         }
