@@ -36,7 +36,8 @@
 			"name" : "Source Files",
 			"sourceIndexes" : 
 			[
-				0
+				0,
+				1
 			]
 		}
 	],
@@ -45,6 +46,11 @@
 		{
 			"backtrace" : 1,
 			"path" : "uart_read.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 1,
+			"path" : "pipe_read.cpp",
 			"sourceGroupIndex" : 0
 		}
 	],

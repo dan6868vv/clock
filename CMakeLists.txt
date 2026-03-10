@@ -15,7 +15,7 @@ set(RAYLIB_PATH "D:/_root/Programs/_Lib_c++/raylib/raylib")
 add_executable(Arrow_Display main.cpp)
 add_custom_target(project_files SOURCES
         uart_read.cpp          # твой файл для форматирования
-
+        pipe_read.cpp
 )
 # Добавляем пути для заголовочных файлов (чтобы #include работали)
 target_include_directories(Arrow_Display PRIVATE

@@ -4,7 +4,7 @@
 #include <sys/stat.h>
 
 int main() {
-    const char* pipe_path = "/tmp/myapp_pipe";
+    const char *pipe_path = "/tmp/myapp_pipe";
 
     // Создаем канал
     mkfifo(pipe_path, 0666);
@@ -24,10 +24,9 @@ int main() {
 
         if (bytes > 0) {
             buffer[bytes] = '\0';
-         //   std::cout << "Получено: " << buffer << std::endl;
-           std::cout << "Получено: " << atof(buffer) << std::endl;
-        //   std::cout << atof(buffer) <<
-            std:: cout << "Size: " << sizeof(atof(buffer)) << std::endl;
+            std::cout << "Получено: " << buffer << std::endl;
+            // std::cout << "Получено: " << atof(buffer) << std::endl;
+   //         std::cout << "Size: " << sizeof(atof(buffer)) << std::endl;
         }
 
         close(fd);
