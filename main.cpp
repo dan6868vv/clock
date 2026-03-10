@@ -142,6 +142,7 @@ int main() {
 
 #ifdef __unix__
     getJsonByPipe(jsonMapTarget);
+    std::cout << "Before import models" << std::endl;
     importModels(jsonMapTarget, modelMap);
     jsonMapCurrent = jsonMapTarget;
     getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
