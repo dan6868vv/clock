@@ -1,0 +1,31 @@
+# 3ds Max Wavefront OBJ Exporter v0.99 - (c)2007 guruware
+# File Created: 10.03.2026 13:38:05
+
+mtllib red.mtl
+
+#
+# object red_102_5
+#
+
+v  -1.2037 10.1289 -0.7844
+v  -1.2037 9.9701 -1.9509
+v  -1.2037 32.4846 -5.0150
+v  -1.2037 32.6434 -3.8485
+# 4 vertices
+
+vn 0.0000 0.9909 -0.1349
+# 1 vertex normals
+
+vt 0.1400 0.0105 1.0000
+vt 0.8600 0.0105 1.0000
+vt 0.8600 0.9895 1.0000
+vt 0.1400 0.9895 1.0000
+# 4 texture coords
+
+o red_102_5
+g red_102_5
+usemtl red_plastic
+f 1/1/1 2/2/1 3/3/1 
+f 3/3/1 4/4/1 1/1/1 
+# 2 faces
+

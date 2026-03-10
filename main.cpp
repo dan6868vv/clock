@@ -159,11 +159,11 @@ int main() {
       //  DrawModel(clock, (Vector3){0, 0, 0}, 1.0f, WHITE);
         //     DrawModel(yellow, (Vector3){0, 0, 0}, 1.0f, WHITE);
 
-        DrawGrid(10, 1.0f);
-        EndMode3D();
-
-        DrawFPS(10, 10);
-        EndDrawing();
+        // DrawGrid(10, 1.0f);
+        // EndMode3D();
+        //
+        // DrawFPS(10, 10);
+        // EndDrawing();
 
 
         for (auto i: jsonMap) {
