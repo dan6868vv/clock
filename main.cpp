@@ -16,6 +16,7 @@
 #include <unordered_map>
 #include <string>
 #include <sstream>
+#define __id "1"
 #ifdef __unix__
 float getAngleByPipe() {
     const char* pipe_path = "/tmp/myapp_pipe";
@@ -67,6 +68,8 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
             size_t pos = item.find(':');
             if (pos != std::string::npos) {
                 std::string key = item.substr(0, pos);
+                if(key == "id" && item.substr(pos + 1)!=__id)
+                    return;
                // int value = std::stoi(item.substr(pos + 1));
                 jsonMap[key] = item.substr(pos + 1);
 
