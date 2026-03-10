@@ -68,7 +68,7 @@
 		},
 		{
 			"backtrace" : 1,
-			"path" : "clock_porgram_compile",
+			"path" : "clock_program_compile",
 			"sourceGroupIndex" : 1
 		}
 	],

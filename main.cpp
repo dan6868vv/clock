@@ -17,6 +17,7 @@
 #include <string>
 #include <sstream>
 #define __id "1"
+
 #ifdef __unix__
 float getAngleByPipe() {
     const char* pipe_path = "/tmp/myapp_pipe";
@@ -70,17 +71,11 @@ void getJsonByPipe(std::unordered_map<std::string, std::string> &jsonMap) {
                 std::string key = item.substr(0, pos);
                 if(key == "id" && item.substr(pos + 1)!=__id)
                     return;
-               // int value = std::stoi(item.substr(pos + 1));
                 jsonMap[key] = item.substr(pos + 1);
-
             }
         }
-        // for(auto i:jsonMap) {
-        //     std::cout << i.first << ": " << i.second << std::endl;
-        // }
         break;
     }
-   // return 0;
 }
 #endif
 
@@ -104,19 +99,7 @@ bool importModels(std::unordered_map<std::string, std::string> jsonMap,
 int main() {
     InitWindow(800, 800, "3D Clock");
 
-    // Флаг для отслеживания полноэкранного режима
-    //  bool isFullscreen = true;
-    //  ToggleFullscreen(); // Включаем полноэкранный режим
-
-#ifdef __unix__
-    // Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_frame.obj");
- //    Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/tv-45_needle.obj");
- //   Model clock = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/scale.obj");
- //   Model needle = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/needle_2.obj");
- //   Model yellow = LoadModel("/home/andrey/qwer/clock/_models_for_unix/ite_2t_2/yellow.obj");
-#elif defined(_WIN64)
-    // Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
-    // Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_needle.obj");
+#ifdef _WIN64
     Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
     Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_needle.obj");
 #endif
@@ -127,47 +110,31 @@ int main() {
     camera.up = (Vector3){0.0f, 2.0f, 0.0f};
     camera.fovy = 90.0f;
 
-    float angle = 0;
-
     std::unordered_map<std::string, std::string> jsonMap;
     std::unordered_map<std::string, Model> modelMap;
 #ifdef __unix__
-    //        angle = getAngleByPipe();
     getJsonByPipe(jsonMap);
     importModels(jsonMap,modelMap);
 #elif defined(_WIN64)
+    float angle = 0;
     angle += 1;
 #endif
+
     while (!WindowShouldClose()) {
+        BeginDrawing();
+        ClearBackground(RAYWHITE);
+        BeginMode3D(camera);
 #ifdef __unix__
         getJsonByPipe(jsonMap);
         for(auto& it:modelMap) {
             it.second.transform = MatrixRotateX(DEG2RAD * stof(jsonMap[it.first]));
-       //     std::cout << "stof(jsonMap[it.first]): " << stof(jsonMap[it.first]);
-        }
-#endif
-        //    needle.transform = MatrixRotateX(DEG2RAD * rotation); // вращение вокруг X
-        //needle.transform = MatrixRotateX(DEG2RAD * angle); // вращение вокруг X
-
-        BeginDrawing();
-        ClearBackground(RAYWHITE);
-        BeginMode3D(camera);
-
-        // Рисуем всю модель целиком
-
-        for(auto it: modelMap) {
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
-      //  DrawModel(needle, (Vector3){0, 0, 0}, 1.0f, WHITE);
-      //  DrawModel(clock, (Vector3){0, 0, 0}, 1.0f, WHITE);
-        //     DrawModel(yellow, (Vector3){0, 0, 0}, 1.0f, WHITE);
+#endif
 
-        DrawGrid(10, 1.0f);
         EndMode3D();
-
         DrawFPS(10, 10);
         EndDrawing();
-
 
         for (auto i: jsonMap) {
             std::cout << i.first << ": " << i.second << std::endl;
@@ -176,9 +143,6 @@ int main() {
     for(auto it:modelMap) {
         UnloadModel(it.second);
     }
-    // UnloadModel(clock);
-    // UnloadModel(needle);
-    // //  UnloadModel(needle);
     CloseWindow();
     return 0;
 }

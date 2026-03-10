@@ -1,4 +1,4 @@
 # ninja log v6
-13	140	7948303296964961	CMakeFiles/Arrow_Display.dir/main.cpp.obj	f8db23b6eceb63e5
-3	530	7948329494592221	build.ninja	d0438d8261dc4768
-141	309	7948303298244946	Arrow_Display.exe	d9cf634fd7e1f870
+29	813	7948444693559439	CMakeFiles/Arrow_Display.dir/main.cpp.obj	f8db23b6eceb63e5
+3	348	7948447720336528	build.ninja	d0438d8261dc4768
+814	1052	7948444701408659	Arrow_Display.exe	d9cf634fd7e1f870
