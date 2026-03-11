@@ -68,7 +68,7 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
         return false;
     }
     close(fd);
-
+    std::string buff = std::string(buffer);
     std::stringstream ss(buff);
     std::string item;
     while (std::getline(ss, item, ',')) {
