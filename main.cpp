@@ -65,8 +65,12 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     std::cout << "Время выполнения в функции: " << duration.count() / 1000.0 << " мс" << std::endl;
     char buffer[1024];
     ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+
     if (bytes > 0) {
         buffer[bytes] = '\0';
+    }
+    else {
+        return;
     }
     close(fd);
 
