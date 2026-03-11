@@ -160,8 +160,8 @@ int main() {
             jsonMapCurrent[it.first] += 0.5f * jsonMapDifferent[it.first];
             it.second.transform =
                     MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
-            std::cout << "Draw " << it.first << " diffe: " << jsonMapDifferent[it.first] << std::endl;
-            std::cout << "Draw " << it.first << " angle: " << jsonMapCurrent[it.first] << std::endl;
+         //   std::cout << "Draw " << it.first << " diffe: " << jsonMapDifferent[it.first] << std::endl;
+         //   std::cout << "Draw " << it.first << " angle: " << jsonMapCurrent[it.first] << std::endl;
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
 #endif
@@ -169,10 +169,11 @@ int main() {
         EndMode3D();
         DrawFPS(10, 10);
         EndDrawing();
-
+        std::cout << "In for" << std::endl;
         for (auto i: jsonMapTarget) {
             std::cout << i.first << ": " << i.second << std::endl;
         }
+        std::cout << "After for" << std::endl;
     }
 
     for (auto it: modelMap) {
