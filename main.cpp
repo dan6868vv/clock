@@ -56,7 +56,6 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
     if (fd == -1) {
         perror("open");
-        close(fd);
         return ;
     }
     auto end = std::chrono::high_resolution_clock::now();
@@ -72,6 +71,7 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     close(fd);
 
     std::string buff = std::string(buffer);
+    std::cout << "Buff len: " << buff.length() << std::endl;
     std::cout << "Buff: " << buff << std::endl;
     std::stringstream ss(buff);
     std::string item;
