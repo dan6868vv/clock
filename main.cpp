@@ -44,7 +44,7 @@ float getAngleByPipe() {
     return 0;
 }
 
-void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
+bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     const char *pipe_path = "/tmp/myapp_pipe";
     mkfifo(pipe_path, 0666);
    // bool flag = true;
@@ -56,7 +56,7 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
     if (fd == -1) {
         perror("open");
-        return ;
+        return false;
     }
     auto end = std::chrono::high_resolution_clock::now();
     // Вычисляем длительность
@@ -70,7 +70,7 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
         buffer[bytes] = '\0';
     }
     else {
-        return;
+        return false;
     }
     close(fd);
 
@@ -84,13 +84,13 @@ void getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
         if (pos != std::string::npos) {
             std::string key = item.substr(0, pos);
             if (key == "id" && item.substr(pos + 1) != __id)
-                return ;
+                return false;
             jsonMap[key] = stof(item.substr(pos + 1));
         }
     }
     // break;
     //  }
- //   return true;
+    return true;
 }
 #endif
 
@@ -146,12 +146,12 @@ int main() {
     std::string line;
 
 #ifdef __unix__
-    getJsonByPipe(jsonMapTarget);
-    std::cout << "Before import models" << std::endl;
-    importModels(jsonMapTarget, modelMap);
-    jsonMapCurrent = jsonMapTarget;
-    getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
-
+    while(!getJsonByPipe(jsonMapTarget)) {
+        std::cout << "Before import models" << std::endl;
+        importModels(jsonMapTarget, modelMap);
+        jsonMapCurrent = jsonMapTarget;
+        getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
+    }
     #elif defined(_WIN64)
     float angle = 0;
     angle += 1;
