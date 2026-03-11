@@ -49,7 +49,6 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     mkfifo(pipe_path, 0666);
    // bool flag = true;
     //  while (flag) {
-    auto start = std::chrono::high_resolution_clock::now();
 
     // Засекаем конец
 
@@ -58,11 +57,7 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
         perror("open");
         return false;
     }
-    auto end = std::chrono::high_resolution_clock::now();
     // Вычисляем длительность
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-    std::cout << "Время выполнения в функции: " << duration.count() << " мкс" << std::endl;
-    std::cout << "Время выполнения в функции: " << duration.count() / 1000.0 << " мс" << std::endl;
     char buffer[1024];
     ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
 
@@ -74,9 +69,6 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     }
     close(fd);
 
-    std::string buff = std::string(buffer);
-    std::cout << "Buff len: " << buff.length() << std::endl;
-    std::cout << "Buff: " << buff << std::endl;
     std::stringstream ss(buff);
     std::string item;
     while (std::getline(ss, item, ',')) {
@@ -88,8 +80,6 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
             jsonMap[key] = stof(item.substr(pos + 1));
         }
     }
-    // break;
-    //  }
     return true;
 }
 #endif
@@ -97,7 +87,6 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
 bool importModels(std::unordered_map<std::string, float> jsonMap,
                   std::unordered_map<std::string, Model> &modelMap) {
     float id = jsonMap["id"];
-    std::cout << "In import models" << std::endl;
     for (auto i: jsonMap) {
         std::cout << i.first << ":" << i.second << std::endl;
         if (i.first == "id")
@@ -149,7 +138,6 @@ int main() {
     while(!getJsonByPipe(jsonMapTarget)) {
         sleep(10);
     }
-std::cout << "Before import models" << std::endl;
         importModels(jsonMapTarget, modelMap);
         jsonMapCurrent = jsonMapTarget;
         getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
@@ -165,22 +153,11 @@ std::cout << "Before import models" << std::endl;
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
 #ifdef __unix__
-        auto start = std::chrono::high_resolution_clock::now();
         getJsonByPipe(jsonMapTarget);
-        // Засекаем конец
-        auto end = std::chrono::high_resolution_clock::now();
 
-        // Вычисляем длительность
-        auto duration = std::chrono::duration_cast<std::chrono::microseconds>(end - start);
-
-        std::cout << "Время выполнения: " << duration.count() << " мкс" << std::endl;
-        std::cout << "Время выполнения: " << duration.count() / 1000.0 << " мс" << std::endl;
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
-
         for (auto &it: modelMap) {
-            //if(jsonMapDifferent[it.first]==0)
-            //    continue;
-            jsonMapCurrent[it.first] += 0.3f * jsonMapDifferent[it.first];
+            jsonMapCurrent[it.first] += 0.5f * jsonMapDifferent[it.first];
             it.second.transform =
                     MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
             std::cout << "Draw " << it.first << " diffe: " << jsonMapDifferent[it.first] << std::endl;
