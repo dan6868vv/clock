@@ -51,6 +51,10 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
     // int fd = open(pipe_path, O_RDONLY);
     if (fd == -1) {
+        if(errno==EWOULDBLOCK) {
+            std::cout << "errno==EWOULDBLOCK" << std::endl;
+            sleep(10);
+        }
         perror("open");
         sleep(1);
         close(fd);
