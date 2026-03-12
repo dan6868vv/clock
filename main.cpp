@@ -49,6 +49,7 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     mkfifo(pipe_path, 0666);
 
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
+    int fd = open(pipe_path, O_RDONLY);
     if (fd == -1) {
         perror("open");
         sleep(1);
