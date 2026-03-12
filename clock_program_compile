@@ -8,7 +8,7 @@ SOURCES = main.cpp
 
 # Компилятор и флаги
 CXX = g++
-CXXFLAGS = -O2 -Wall
+CXXFLAGS = -O0 -Wall
 LDFLAGS = -I/home/andrey/raylib/src -L/home/andrey/raylib/src -lraylib -ldrm -lgbm -lEGL -lGLESv2 -lm -lpthread -ldl -lrt
 
 # Правило сборки
