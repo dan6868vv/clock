@@ -111,21 +111,22 @@ void readUsrtStringPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
     std::cout << "📤 UART: " << json << std::endl;
 
     // Пытаемся открыть канал
-    int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+    // int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+    int fd2 = open(pipe_path.c_str(), O_WRONLY);
 
-    if (fd2 == -1 ) {
+    if (fd2 == -1) {
         // Анализируем причину ошибки
         switch (errno) {
             case ENXIO:
                 // Это нормально - просто нет читателя
-                    std::cout << "📭 Нет читателя канала (данные не отправлены)" << std::endl;
-            break;
+                std::cout << "📭 Нет читателя канала (данные не отправлены)" << std::endl;
+                break;
             case ENOENT:
                 std::cerr << "❌ Канал не существует" << std::endl;
-            break;
+                break;
             case EACCES:
                 std::cerr << "❌ Нет прав доступа к каналу" << std::endl;
-            break;
+                break;
             default:
                 std::cerr << "❌ Ошибка открытия: " << strerror(errno) << std::endl;
         }
@@ -152,6 +153,7 @@ void readUsrtStringPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
     close(fd2);
     std::cout << "🔒 Канал закрыт" << std::endl;
 }
+
 int main(int argc, char **argv) {
     // Параметры по умолчанию
     std::string port = "/dev/serial0";
