@@ -105,8 +105,8 @@ void readUartFloatPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
 void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
 
     // Пытаемся открыть канал
-    int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
-    // int fd2 = open(pipe_path.c_str(), O_WRONLY);
+    // int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+    int fd2 = open(pipe_path.c_str(), O_WRONLY);
     if (fd2 == -1) {
         // Анализируем причину ошибки
         switch (errno) {
