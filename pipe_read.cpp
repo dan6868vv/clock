@@ -15,6 +15,11 @@ int main() {
     while (true) {
         int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
         if (fd == -1) {
+            if(errno==EWOULDBLOCK) {
+                std::cout << "errno==EWOULDBLOCK" << std::endl;
+                sleep(10);
+                continue;
+            }
             perror("open");
             sleep(1);
             continue;
