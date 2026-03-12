@@ -47,7 +47,7 @@ float getAngleByPipe() {
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     const char *pipe_path = "/tmp/myapp_pipe";
     mkfifo(pipe_path, 0666);
-   // bool flag = true;
+    // bool flag = true;
     //  while (flag) {
 
     // Засекаем конец
@@ -55,7 +55,8 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
     if (fd == -1) {
         perror("open");
-    //    close(fd);
+        sleep(1);
+        //    close(fd);
         return false;
     }
     // Вычисляем длительность
@@ -65,8 +66,10 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     std::cout << "Buffer:" << std::endl;
     std::cout << std::string(buffer) << std::endl;
     if (bytes <= 0) {
+        sleep(1);
         close(fd);
-        return false;  // guard закроет fd автоматически
+        sleep(1);
+        return false; // guard закроет fd автоматически
     }
     buffer[bytes] = '\0';
     close(fd);

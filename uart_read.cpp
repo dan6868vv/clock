@@ -101,7 +101,7 @@ void readUsrtStringPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
         if ((write(fd2, json.c_str(), json.length())) == -1){
             perror("write");
         }
-        std::cout << "Strint to push: "<< json << std::endl;
+       // std::cout << "Strint to push: "<< angleByString << std::endl;
 
         close(fd2);
     }

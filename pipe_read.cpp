@@ -13,7 +13,7 @@ int main() {
     std::cout << "Читатель запущен. Ожидание данных..." << std::endl;
 
     while (true) {
-        int fd = open(pipe_path, O_RDONLY);
+        int fd = open(pipe_path, O_RDONLY  | O_NONBLOCK);
         if (fd == -1) {
             perror("open");
             sleep(1);
