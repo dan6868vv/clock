@@ -56,28 +56,28 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     if (fd == -1) {
         perror("open");
         sleep(1);
-        //    close(fd);
+        close(fd);
         return false;
     }
     // Вычисляем длительность
     char buffer[1024];
-    ssize_t bytes = read(fd, &buffer, sizeof(buffer) - 1);
+    ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+    std::string buff;
+
   //  close(fd);
     if (bytes > 0) {
         buffer[bytes] = '\0';
+        std::string buff = std::string(buffer);
+        close(fd);
     }
     else {
+        close(fd);
         return false;
     }
-    std::cout << "Buffer:" << std::endl;
-    std::cout << std::string(buffer) << std::endl;
-    if (bytes <= 0) {
 
-        return false; // guard закроет fd автоматически
-    }
-    buffer[bytes] = '\0';
- //   close(fd);
-    std::string buff = std::string(buffer);
+    std::cout << "Buffer:" << std::endl;
+    std::cout << buff << std::endl;
+
     std::stringstream ss(buff);
     std::string item;
     while (std::getline(ss, item, ',')) {
