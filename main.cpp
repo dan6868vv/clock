@@ -55,7 +55,7 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
     if (fd == -1) {
         perror("open");
-        close(fd);
+    //    close(fd);
         return false;
     }
     // Вычисляем длительность
