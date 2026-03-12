@@ -201,6 +201,7 @@ int main(int argc, char **argv) {
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
+        sleep(5);
     }
 
     // Очистка
