@@ -62,10 +62,14 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     char buffer[1024];
     ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
 
+    std::cout << "Buffer:" << std::ednl;
+    std::cout << std::string(buffer) << std::ednl;
     if (bytes > 0) {
+        std::cout << "In if" << std::ednl;
         buffer[bytes] = '\0';
     }
     else {
+        std::cout << "In else:" << std::ednl;
         close(fd);
         return false;
     }
