@@ -13,7 +13,7 @@ int main() {
     std::cout << "Читатель запущен. Ожидание данных..." << std::endl;
 
     while (true) {
-        int fd = open(pipe_path, O_RDONLY  | O_NONBLOCK);
+        int fd = open(pipe_path, O_RDONLY);
         if (fd == -1) {
             perror("open");
             sleep(1);
@@ -25,14 +25,14 @@ int main() {
 
         if (bytes > 0) {
             buffer[bytes] = '\0';
-            // std::cout << "Получено: ";
-            // for(int i=0;i<bytes;i++) {
-            //     std::cout << buffer[i];
-            // }
+            std::cout << "Получено: ";
+            for(int i=0;i<bytes;i++) {
+                std::cout << buffer[i];
+            }
             std::cout << std::endl;
             std::cout << "Получено: " << std::string(buffer) << std::endl;
             // std::cout << "Получено: " << atof(buffer) << std::endl;
-   //         std::cout << "Size: " << sizeof(atof(buffer)) << std::endl;
+            //         std::cout << "Size: " << sizeof(atof(buffer)) << std::endl;
         }
 
         close(fd);
