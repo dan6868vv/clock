@@ -197,11 +197,17 @@ int main(int argc, char **argv) {
     while (true) {
         if (fd != -1 && reader != nullptr) {
             //    readUartFloatPushItToPipe(reader, pipe_path);
-            readUsrtStringPushItToPipe(reader, pipe_path);
+            // readUsrtStringPushItToPipe(reader, pipe_path);
+            std::string json = "";
+            if (!reader->readJSON(json)) {
+                continue;
+            }
+
+            std::cout << "json: " << json << std::endl;
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
-        sleep(5);
+     //   sleep(5);
     }
 
     // Очистка

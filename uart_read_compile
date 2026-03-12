@@ -6,7 +6,7 @@ SOURCES = uart_read.cpp
 
 # Компилятор и флаги
 CXX = g++
-CXXFLAGS = -O2 -Wall
+CXXFLAGS = -O0 -Wall
 LDFLAGS = -lwiringPi -lsfml-graphics -lsfml-window -lsfml-system
 #LDFLAGS = -lwiringPi
 
