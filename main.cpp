@@ -18,7 +18,7 @@
 #include <sstream>
 #define __id "1"
 #include <chrono>
-#ifdef __unix__
+//#ifdef __unix__
 float getAngleByPipe() {
     const char *pipe_path = "/tmp/myapp_pipe";
     // Создаем канал
@@ -47,10 +47,6 @@ float getAngleByPipe() {
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     const char *pipe_path = "/tmp/myapp_pipe";
     mkfifo(pipe_path, 0666);
-    // bool flag = true;
-    //  while (flag) {
-
-    // Засекаем конец
 
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
     if (fd == -1) {
@@ -59,22 +55,21 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
         close(fd);
         return false;
     }
-    // Вычисляем длительность
+
     char buffer[1024];
     ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
     std::string buff;
 
-  //  close(fd);
+
     if (bytes > 0) {
         buffer[bytes] = '\0';
-        std::string buff = std::string(buffer);
-        close(fd);
+        buff = std::string(buffer);
     }
     else {
         close(fd);
         return false;
     }
-
+    close(fd);
     std::cout << "Buffer:" << std::endl;
     std::cout << buff << std::endl;
 
