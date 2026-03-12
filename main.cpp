@@ -61,15 +61,18 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     }
     // Вычисляем длительность
     char buffer[1024];
-    ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+    ssize_t bytes = read(fd, &buffer, sizeof(buffer) - 1);
     close(fd);
-
+    if (bytes > 0) {
+        buffer[bytes] = '\0';
+    }
+    else {
+        return false;
+    }
     std::cout << "Buffer:" << std::endl;
     std::cout << std::string(buffer) << std::endl;
     if (bytes <= 0) {
-  //      sleep(1);
-    //    close(fd);
-//        sleep(1);
+
         return false; // guard закроет fd автоматически
     }
     buffer[bytes] = '\0';
