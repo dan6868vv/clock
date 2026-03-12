@@ -59,18 +59,15 @@ public:
         return false;
     }
 
-	bool readJSON(std::string &json) {
-    //    std::string line;
+    bool readJSON(std::string &json) {
+        //    std::string line;
         if (readLine(json)) {
             return true;
         }
         return false;
     }
 };
-void readFloatFromUartPushItToPipe(){
 
-
-}
 
 void readUartFloatPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
     float angle = 0;
@@ -82,31 +79,79 @@ void readUartFloatPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
             perror("open");
         }
         std::string angleByString = std::to_string(angle);
-        if ((write(fd2, angleByString.c_str(), angleByString.length())) == -1){
+        if ((write(fd2, angleByString.c_str(), angleByString.length())) == -1) {
             perror("write");
         }
         close(fd2);
     }
 }
 
+// void readUsrtStringPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
+//     std::string json = "";
+//     if (reader->readJSON(json)) {
+//         std::cout << json << std::endl;
+//         int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+//         if (fd2 == -1) {
+//             std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
+//             perror("open");
+//         } else ((write(fd2, json.c_str(), json.length())) == -1) {
+//             perror("write");
+//         }
+//         // std::cout << "Strint to push: "<< angleByString << std::endl;
+//
+//         close(fd2);
+//     }
+// }
 void readUsrtStringPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
     std::string json = "";
-    if (reader->readJSON(json)) {
-        std::cout << json << std::endl;
-        int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
-        if (fd2 == -1) {
-            std::cerr << "Ошибка открытия канала FIFO Pipe" << std::endl;
-            perror("open");
-        }
-        if ((write(fd2, json.c_str(), json.length())) == -1){
-            perror("write");
-        }
-       // std::cout << "Strint to push: "<< angleByString << std::endl;
-
-        close(fd2);
+    if (!reader->readJSON(json)) {
+        return; // нет данных из UART
     }
-}
 
+    std::cout << "📤 UART: " << json << std::endl;
+
+    // Пытаемся открыть канал
+    int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+
+    if (fd2 == -1) {
+        // Анализируем причину ошибки
+        switch (errno) {
+            case ENXIO:
+                // Это нормально - просто нет читателя
+                    std::cout << "📭 Нет читателя канала (данные не отправлены)" << std::endl;
+            break;
+            case ENOENT:
+                std::cerr << "❌ Канал не существует" << std::endl;
+            break;
+            case EACCES:
+                std::cerr << "❌ Нет прав доступа к каналу" << std::endl;
+            break;
+            default:
+                std::cerr << "❌ Ошибка открытия: " << strerror(errno) << std::endl;
+        }
+        return;
+    }
+
+    // Канал открыт успешно
+    std::cout << "🔗 Канал открыт, fd=" << fd2 << std::endl;
+
+    // Пытаемся записать
+    ssize_t written = write(fd2, json.c_str(), json.length());
+
+    if (written == -1) {
+        if (errno == EPIPE) {
+            std::cout << "📪 Читатель закрыл канал во время записи" << std::endl;
+        } else {
+            std::cerr << "❌ Ошибка записи: " << strerror(errno) << std::endl;
+        }
+    } else {
+        std::cout << "✅ Записано " << written << " байт в канал" << std::endl;
+    }
+
+    // Всегда закрываем дескриптор
+    close(fd2);
+    std::cout << "🔒 Канал закрыт" << std::endl;
+}
 int main(int argc, char **argv) {
     // Параметры по умолчанию
     std::string port = "/dev/serial0";
@@ -147,9 +192,9 @@ int main(int argc, char **argv) {
         return 1;
     }
 
-    while(true){
+    while (true) {
         if (fd != -1 && reader != nullptr) {
-        //    readUartFloatPushItToPipe(reader, pipe_path);
+            //    readUartFloatPushItToPipe(reader, pipe_path);
             readUsrtStringPushItToPipe(reader, pipe_path);
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
