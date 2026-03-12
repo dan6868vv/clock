@@ -113,7 +113,7 @@ void readUsrtStringPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
     // Пытаемся открыть канал
     int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
 
-    if (fd2 == -1 && errno != ENXIO) {
+    if (fd2 == -1 ) {
         // Анализируем причину ошибки
         switch (errno) {
             case ENXIO:
