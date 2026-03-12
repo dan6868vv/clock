@@ -103,7 +103,6 @@ void readUartFloatPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
 //     }
 // }
 void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
-
     // Пытаемся открыть канал
     // int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
     int fd2 = open(pipe_path.c_str(), O_WRONLY);
@@ -131,16 +130,20 @@ void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
 
     // Пытаемся записать
     ssize_t written = write(fd2, json.c_str(), json.length());
-    close(fd2);
     if (written == -1) {
         if (errno == EPIPE) {
             std::cout << "📪 Читатель закрыл канал во время записи" << std::endl;
+        } else if (errno == EWOULDBLOCK) {
+            std::cout << "errno == EWOULDBLOCK" << std::endl;
+            sleep(5);
+            return;
         } else {
             std::cerr << "❌ Ошибка записи: " << strerror(errno) << std::endl;
         }
     } else {
         std::cout << "✅ Записано " << written << " байт в канал" << std::endl;
     }
+    close(fd2);
 
     // Всегда закрываем дескриптор
     std::cout << "🔒 Канал закрыт" << std::endl;
@@ -195,11 +198,10 @@ int main(int argc, char **argv) {
             }
             std::cout << "json: " << json << std::endl;
             readUsrtStringPushItToPipe(json, pipe_path);
-
         } else {
             std::cout << "\033[31mUART не определен\033[0m" << std::endl;
         }
-     //   sleep(5);
+        //   sleep(5);
     }
 
     // Очистка
