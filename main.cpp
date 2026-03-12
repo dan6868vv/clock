@@ -66,7 +66,7 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
         buffer[bytes] = '\0';
     }
     else {
-        //close(fd);
+        close(fd);
         return false;
     }
     close(fd);
