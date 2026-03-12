@@ -62,7 +62,7 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     // Вычисляем длительность
     char buffer[1024];
     ssize_t bytes = read(fd, &buffer, sizeof(buffer) - 1);
-    close(fd);
+  //  close(fd);
     if (bytes > 0) {
         buffer[bytes] = '\0';
     }
