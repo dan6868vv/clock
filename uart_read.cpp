@@ -105,14 +105,14 @@ void readUartFloatPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
 void readUsrtStringPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
     std::string json = "";
     if (!reader->readJSON(json)) {
-        return; // нет данных из UART
+        return;
     }
 
     std::cout << "📤 UART: " << json << std::endl;
 
     // Пытаемся открыть канал
-    // int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
-    int fd2 = open(pipe_path.c_str(), O_WRONLY);
+    int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
+    // int fd2 = open(pipe_path.c_str(), O_WRONLY);
 
     if (fd2 == -1) {
         // Анализируем причину ошибки
