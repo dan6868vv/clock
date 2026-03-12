@@ -64,15 +64,10 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
 
     std::cout << "Buffer:" << std::endl;
     std::cout << std::string(buffer) << std::endl;
-    if (bytes > 0) {
-        std::cout << "In if" << std::endl;
-        buffer[bytes] = '\0';
+    if (bytes <= 0) {
+        return false;  // guard закроет fd автоматически
     }
-    else {
-        std::cout << "In else:" << std::endl;
-        close(fd);
-        return false;
-    }
+    buffer[bytes] = '\0';
     close(fd);
     std::string buff = std::string(buffer);
     std::stringstream ss(buff);
