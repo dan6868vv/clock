@@ -22,6 +22,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <vector>
+#include <fstream>  // Для чтения конфигурационного файла
 
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *pipe_path, int &fd) {
     if (fd == -1) {
