@@ -1,6 +1,4 @@
-k:
-b:
-
+k:1
+b:2
 # for y=kx+b
-
 load:needle_1,needle_2,id,scale,yellow,cover,red,green
