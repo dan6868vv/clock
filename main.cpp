@@ -18,7 +18,7 @@
 #include <sstream>
 #define __id "1"
 #include <chrono>
-//#ifdef __unix__
+#ifdef __unix__
 
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *pipe_path, int &fd) {
     FILE *fp;
