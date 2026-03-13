@@ -105,7 +105,7 @@ void readUartFloatPushItToPipe(UARTLineReader *reader, std::string pipe_path) {
 void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
     // Пытаемся открыть канал
     // int fd2 = open(pipe_path.c_str(), O_WRONLY | O_NONBLOCK);
-    int fd2 = open(pipe_path.c_str(), O_WRONLY );
+    int fd2 = open(pipe_path.c_str(), O_WRONLY);
     if (fd2 == -1) {
         // Анализируем причину ошибки
         switch (errno) {
@@ -115,6 +115,9 @@ void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
                 break;
             case ENOENT:
                 std::cerr << "❌ Канал не существует" << std::endl;
+                if (mkfifo(pipe_path.c_str(), 0666) == -1 && errno != EEXIST) {
+                    perror("mkfifo");
+                }
                 break;
             case EACCES:
                 std::cerr << "❌ Нет прав доступа к каналу" << std::endl;
@@ -141,13 +144,12 @@ void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
         }
 
         std::cout << "✅ Записано " << written << " байт" << std::endl;
-
-    } catch (const std::system_error& e) {
+    } catch (const std::system_error &e) {
         std::cerr << "❌ Системная ошибка: " << e.what() << std::endl;
         if (e.code().value() == EPIPE) {
             std::cout << "📪 Читатель закрыл канал" << std::endl;
         }
-    } catch (const std::exception& e) {
+    } catch (const std::exception &e) {
         std::cerr << "❌ Ошибка: " << e.what() << std::endl;
     } catch (...) {
         std::cerr << "❌ Неизвестная ошибка!" << std::endl;

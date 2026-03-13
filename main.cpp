@@ -18,25 +18,19 @@
 #include <sstream>
 #define __id "1"
 #include <chrono>
-//#ifdef __unix__
+#ifdef __unix__
 
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* pipe_path, int &fd) {
 
-
-    // int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
-    //TODO
-    // int fd = open(pipe_path, O_RDONLY);
     if (fd == -1) {
         sleep(10);
         fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
         sleep(10);
         if (errno == EWOULDBLOCK) {
             std::cout << "errno==EWOULDBLOCK" << std::endl;
-      //      sleep(10);
         }
         perror("open");
         sleep(1);
-     //   close(fd);
         return false;
     }
 
@@ -44,17 +38,12 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* 
     ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
     std::string buff;
 
-
     if (bytes > 0) {
         buffer[bytes] = '\0';
         buff = std::string(buffer);
     } else {
-      //  close(fd);
         return false;
     }
-  //  close(fd);
-    std::cout << "Buffer:" << std::endl;
-    std::cout << buff << std::endl;
 
     std::stringstream ss(buff);
     std::string item;
@@ -64,7 +53,6 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* 
             std::string key = item.substr(0, pos);
             if (key == "id" && item.substr(pos + 1) != __id)
                 return false;
-            // jsonMap[key] = stof(item.substr(pos + 1));
             try {
                 jsonMap[key] = stof(item.substr(pos + 1));
             } catch (const std::invalid_argument& e) {
@@ -101,6 +89,11 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
     return true;
 }
 
+bool loadModelsByConfig() {
+
+
+    return true;
+}
 void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
              std::unordered_map<std::string, float> jsonMapCurrent,
              std::unordered_map<std::string, float> &jsonMapDifferent) {
@@ -114,6 +107,8 @@ int main() {
     const char *pipe_path = "/tmp/myapp_pipe";
     mkfifo(pipe_path, 0666);
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
+
+    loadModelsByConfig();
 
 #ifdef _WIN64
     Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
@@ -152,14 +147,11 @@ int main() {
         BeginMode3D(camera);
 #ifdef __unix__
         getJsonByPipe(jsonMapTarget,pipe_path,fd);
-
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
             jsonMapCurrent[it.first] += 0.5f * jsonMapDifferent[it.first];
             it.second.transform =
                     MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
-         //   std::cout << "Draw " << it.first << " diffe: " << jsonMapDifferent[it.first] << std::endl;
-         //   std::cout << "Draw " << it.first << " angle: " << jsonMapCurrent[it.first] << std::endl;
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
 #endif
@@ -167,11 +159,9 @@ int main() {
         EndMode3D();
         DrawFPS(10, 10);
         EndDrawing();
-        std::cout << "In for" << std::endl;
         for (auto i: jsonMapTarget) {
             std::cout << i.first << ": " << i.second << std::endl;
         }
-        std::cout << "After for" << std::endl;
     }
 
     for (auto it: modelMap) {
