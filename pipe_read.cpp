@@ -11,18 +11,19 @@ int main() {
     mkfifo(pipe_path, 0666);
 
     std::cout << "Читатель запущен. Ожидание данных..." << std::endl;
+    int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
 
     while (true) {
 
-        int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
         if (fd == -1) {
             if(errno==EWOULDBLOCK) {
                 std::cout << "errno==EWOULDBLOCK" << std::endl;
                 sleep(10);
-                continue;
+               // continue;
             }
             perror("open");
-            sleep(1);
+            sleep(10);
+            fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
             continue;
         }
 
@@ -41,8 +42,8 @@ int main() {
             //         std::cout << "Size: " << sizeof(atof(buffer)) << std::endl;
         }
 
-        close(fd);
     }
+    close(fd);
 
     return 0;
 }
