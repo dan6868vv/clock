@@ -115,9 +115,9 @@ void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
                 break;
             case ENOENT:
                 std::cerr << "❌ Канал не существует" << std::endl;
-                if (mkfifo(pipe_path.c_str(), 0666) == -1 && errno != EEXIST) {
-                    perror("mkfifo");
-                }
+                // if (mkfifo(pipe_path.c_str(), 0666) == -1 && errno != EEXIST) {
+                //     perror("mkfifo");
+                // }
                 break;
             case EACCES:
                 std::cerr << "❌ Нет прав доступа к каналу" << std::endl;
