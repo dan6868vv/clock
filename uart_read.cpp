@@ -130,7 +130,29 @@ void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
 
     // Пытаемся записать
     std::cout << "Tru to write str: " << json << std::endl;
-    ssize_t written = write(fd2, json.c_str(), json.length());
+    // ssize_t written = write(fd2, json.c_str(), json.length());
+    ssize_t written;
+    try {
+        written = write(fd2, json.c_str(), json.length());
+
+        if (written == -1) {
+            // Обработка ошибок write
+            throw std::system_error(errno, std::generic_category(), "Ошибка записи в pipe");
+        }
+
+        std::cout << "✅ Записано " << written << " байт" << std::endl;
+
+    } catch (const std::system_error& e) {
+        std::cerr << "❌ Системная ошибка: " << e.what() << std::endl;
+        if (e.code().value() == EPIPE) {
+            std::cout << "📪 Читатель закрыл канал" << std::endl;
+        }
+    } catch (const std::exception& e) {
+        std::cerr << "❌ Ошибка: " << e.what() << std::endl;
+    } catch (...) {
+        std::cerr << "❌ Неизвестная ошибка!" << std::endl;
+    }
+
     std::cout << "Written: " << written << std::endl;
     std::cout << "Errno: " << errno << std::endl;
     if (written == -1) {
