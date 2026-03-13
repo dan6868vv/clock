@@ -160,7 +160,7 @@ int main() {
         DrawFPS(10, 10);
         EndDrawing();
         for (auto i: jsonMapTarget) {
-            std::cout << i.first << ": " << i.second << std::endl;
+            std::cout << "\"" << i.first << "\": \"" << i.second << "\"" << std::endl;
         }
     }
 
