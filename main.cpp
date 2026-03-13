@@ -18,7 +18,10 @@
 #include <sstream>
 #define __id "1"
 #include <chrono>
-#ifdef __unix__
+#include <fcntl.h>
+#include <io.h>
+#include <unistd.h>
+#include <vector>
 
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *pipe_path, int &fd) {
     if (fd == -1) {
@@ -68,7 +71,6 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *
     }
     return true;
 }
-#endif
 
 bool importModels(std::unordered_map<std::string, float> jsonMap,
                   std::unordered_map<std::string, Model> &modelMap) {
@@ -77,11 +79,8 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
         std::cout << i.first << ":" << i.second << std::endl;
         if (i.first == "id")
             continue;
-#ifdef __unix__
         std::string filePath = "/home/andrey/qwer/clock/_models_for_unix/";
-#elif defined(_WIN64)
-        std::string filePath = "D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/";
-#endif
+
         std::ostringstream oss;
         oss << std::noshowpoint << id; // Убираем десятичную точку, если число целое
         std::string idStr = oss.str(); // "1"
@@ -92,8 +91,47 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
     return true;
 }
 
+bool importModels(std::string configLoad,
+                  std::unordered_map<std::string, Model> &modelMap) {
+    std::stringstream ss(configLoad);
+    std::cout << "config[\"load\"]: " << configLoad << std::endl;
+    std::string item;
+    while (std::getline(ss, item, ',')) {
+        std::string filePath = "/home/andrey/qwer/clock/_models_for_unix/";
+        std::string idStr = __id;
+        Model model = LoadModel(
+            (filePath + idStr + "/" + item + ".obj").c_str());
+        modelMap[item] = model;
+    }
+    return true;
+}
+
 bool loadModelsByConfig() {
     return true;
+}
+
+std::unordered_map<std::string, std::string> loadDataFromConfigFile(const std::string &filename) {
+    std::ifstream file(filename);
+    std::unordered_map<std::string, std::string> config;
+    if (!file.is_open()) {
+        std::cout << "Config is not found" << std::endl;
+        return config;
+    }
+    std::string line;
+    while (std::getline(file, line)) {
+        if (line.empty() || line[0] == '#') continue;
+        std::istringstream iss(line);
+        std::string key;
+        std::string equals;
+        std::string value;
+        if (iss >> key >> equals >> value && equals == "=") {
+            config[key] = value;
+            std::cout << "Данные из config.txt: " << key << " = " << value << std::endl;
+        }
+    }
+
+    file.close();
+    return config;
 }
 
 void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
@@ -105,20 +143,24 @@ void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
 }
 
 float convertScaleNumberToAngle(float scale) {
-    return -17*scale/6 + 360;
+    return -17 * scale / 6 + 360;
 }
+
 int main() {
     InitWindow(800, 800, "3D Clock");
     const char *pipe_path = "/tmp/myapp_pipe";
+    const std::string id = __id;
+    const std::string fileName = "./" + id + "/config.txt";
+
+    std::unordered_map<std::string, float> jsonMapTarget;
+    std::unordered_map<std::string, float> jsonMapCurrent;
+    std::unordered_map<std::string, float> jsonMapDifferent;
+    std::unordered_map<std::string, Model> modelMap;
+
+    std::unordered_map<std::string, std::string> config = loadDataFromConfigFile(fileName);
+
     mkfifo(pipe_path, 0666);
     int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
-
-    loadModelsByConfig();
-
-#ifdef _WIN64
-    Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
-    Model needle = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_needle.obj");
-#endif
 
     Camera3D camera = {0};
     camera.position = (Vector3){45.0f, 0.0f, 0.0f};
@@ -126,41 +168,35 @@ int main() {
     camera.up = (Vector3){0.0f, 2.0f, 0.0f};
     camera.fovy = 90.0f;
 
-    std::unordered_map<std::string, float> jsonMapTarget;
-    std::unordered_map<std::string, float> jsonMapCurrent;
-    std::unordered_map<std::string, float> jsonMapDifferent;
-    std::unordered_map<std::string, Model> modelMap;
-    std::string line;
+    BeginDrawing();
+    importModels(config["load"], modelMap);
+    for(auto i:modelMap) {
+        DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
+    }
+    EndDrawing();
 
-#ifdef __unix__
-    while(!getJsonByPipe(jsonMapTarget,pipe_path,fd)) {
+    while (!getJsonByPipe(jsonMapTarget, pipe_path, fd)) {
         sleep(10);
     }
-        importModels(jsonMapTarget, modelMap);
-        jsonMapCurrent = jsonMapTarget;
-        getDiff(jsonMapTarget,jsonMapCurrent, jsonMapDifferent);
 
-#elif defined(_WIN64)
-    float angle = 0;
-    angle += 1;
-#endif
+//    importModels(jsonMapTarget, modelMap);
+    jsonMapCurrent = jsonMapTarget;
+    getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
 
-    std::string lastLine;
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
-#ifdef __unix__
-        getJsonByPipe(jsonMapTarget,pipe_path,fd);
+
+        getJsonByPipe(jsonMapTarget, pipe_path, fd);
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
-            jsonMapCurrent[it.first] += 0.1f * jsonMapDifferent[it.first];
+            jsonMapCurrent[it.first] += 0.4f * jsonMapDifferent[it.first];
             it.second.transform =
                     // MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
                     MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
-#endif
 
         EndMode3D();
         DrawFPS(10, 10);
