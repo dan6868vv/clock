@@ -122,6 +122,7 @@ std::unordered_map<std::string, std::string> loadDataFromConfigFile(const std::s
     }
     std::string line;
     while (std::getline(file, line)) {
+        std::cout << "Line: " << line << std::endl;
         if (line.empty() || line[0] == '#') continue;
         std::istringstream iss(line);
         std::string key;
