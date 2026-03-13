@@ -151,7 +151,7 @@ int main() {
     InitWindow(800, 800, "3D Clock");
     const char *pipe_path = "/tmp/myapp_pipe";
     const std::string id = __id;
-    const std::string fileName = "./" + id + "/config.txt";
+    const std::string fileName = "/home/andrey/qwer/clock/_models_for_unix/" + id + "/config.txt";
 
     std::unordered_map<std::string, float> jsonMapTarget;
     std::unordered_map<std::string, float> jsonMapCurrent;
