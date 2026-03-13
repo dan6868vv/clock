@@ -21,12 +21,9 @@
 #ifdef __unix__
 
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *pipe_path, int &fd) {
-    FILE *fp;
-
     if (fd == -1) {
         sleep(10);
         fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
-        fp = fdopen(fd, "r");
         sleep(10);
         if (errno == EWOULDBLOCK) {
             std::cout << "errno==EWOULDBLOCK" << std::endl;
@@ -34,32 +31,24 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *
         perror("open");
         sleep(1);
         return false;
-    } else {
-        fp = fdopen(fd, "r");
     }
 
-    //  char buffer[1024];
-    //  ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+    char buffer[1024];
+    ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
     std::string buff;
 
-    if (fp) {
-        // Читаем до символа ';' (вместо ';' можно любой char)
-        if (std::getline(std::cin, buff, ';')) {
-            // Успех, данные в buff (разделитель извлекается, но не сохраняется)
-            if (buff.size() <= 0) {
-                return false;
-            }
-        }
+
+    if (bytes > 0) {
+        buffer[bytes] = '\0';
+        buff = std::string(buffer);
+    } else {
+        perror("read");
+        std::cout << "Errno:" << errno << std::endl;
+        return false;
     }
-    // if (bytes > 0) {
-    //     buffer[bytes] = '\0';
-    //     buff = std::string(buffer);
-    // } else {
-    //     return false;
-    // }
 
     std::stringstream ss(buff);
-    std::cout << "Buff" << buff << std::endl;
+    std::cout << "Buff: " << buff << std::endl;
     std::string item;
     while (std::getline(ss, item, ',')) {
         size_t pos = item.find(':');
