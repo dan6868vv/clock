@@ -129,8 +129,12 @@ void readUsrtStringPushItToPipe(std::string json, std::string pipe_path) {
     std::cout << "🔗 Канал открыт, fd=" << fd2 << std::endl;
 
     // Пытаемся записать
+    std::cout << "Tru to write str: " << json << std::endl;
     ssize_t written = write(fd2, json.c_str(), json.length());
+    std::cout << "Written: " << written << std::endl;
+    std::cout << "Errno: " << errno << std::endl;
     if (written == -1) {
+        std::cout << "Errno: " << errno << std::endl;
         if (errno == EPIPE) {
             std::cout << "📪 Читатель закрыл канал во время записи" << std::endl;
         } else if (errno == EWOULDBLOCK) {
