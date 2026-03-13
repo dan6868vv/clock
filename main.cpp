@@ -18,7 +18,7 @@
 #include <sstream>
 #define __id "1"
 #include <chrono>
-#ifdef __unix__
+//#ifdef __unix__
 float getAngleByPipe() {
     const char *pipe_path = "/tmp/myapp_pipe";
     // Создаем канал
@@ -88,7 +88,15 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* 
             std::string key = item.substr(0, pos);
             if (key == "id" && item.substr(pos + 1) != __id)
                 return false;
-            jsonMap[key] = stof(item.substr(pos + 1));
+            // jsonMap[key] = stof(item.substr(pos + 1));
+            try {
+                jsonMap[key] = stof(item.substr(pos + 1));
+            } catch (const std::invalid_argument& e) {
+                std::cout << "❌ Ошибка: неверный формат числа" << std::endl;
+                std::cout << "   what(): " << e.what() << std::endl;
+            } catch (const std::exception& e) {
+                std::cout << "Ошибка: " << e.what() << std::endl;
+            }
         }
     }
     return true;
