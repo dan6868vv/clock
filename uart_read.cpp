@@ -208,6 +208,7 @@ int main(int argc, char **argv) {
     if (reader != nullptr) {
         delete reader;
     }
+
     if (fd != -1) {
         serialClose(fd);
         std::cout << "Порт закрыт" << std::endl;
