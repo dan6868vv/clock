@@ -175,9 +175,11 @@ int main() {
     BeginDrawing();
     importModels(config["load"], modelMap);
     for (auto i: modelMap) {
+        i.second.transform =
+                MatrixRotateX(0);
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
-  //  EndDrawing();
+    EndDrawing();
 
     while (!getJsonByPipe(jsonMapTarget, pipe_path, fd)) {
         sleep(10);
@@ -188,7 +190,7 @@ int main() {
     getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
 
     while (!WindowShouldClose()) {
-     //   BeginDrawing();
+        BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
 
