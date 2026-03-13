@@ -177,7 +177,7 @@ int main() {
     for (auto i: modelMap) {
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
-    EndDrawing();
+  //  EndDrawing();
 
     while (!getJsonByPipe(jsonMapTarget, pipe_path, fd)) {
         sleep(10);
@@ -188,7 +188,7 @@ int main() {
     getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
 
     while (!WindowShouldClose()) {
-        BeginDrawing();
+     //   BeginDrawing();
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
 
