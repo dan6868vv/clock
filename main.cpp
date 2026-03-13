@@ -18,31 +18,7 @@
 #include <sstream>
 #define __id "1"
 #include <chrono>
-#ifdef __unix__
-float getAngleByPipe() {
-    const char *pipe_path = "/tmp/myapp_pipe";
-    // Создаем канал
-    mkfifo(pipe_path, 0666);
-    // std::cout << "Читатель запущен. Ожидание данных..." << std::endl;
-    bool flag = true;
-    while (flag) {
-        int fd = open(pipe_path, O_RDONLY);
-        if (fd == -1) {
-            perror("open");
-            sleep(1);
-            continue;
-        }
-        char buffer[1024];
-        ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
-        if (bytes > 0) {
-            buffer[bytes] = '\0';
-            //     std::cout << "Получено: " << buffer << std::endl;
-        }
-        close(fd);
-        return atof(buffer);
-    }
-    return 0;
-}
+//#ifdef __unix__
 
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* pipe_path, int &fd) {
 
