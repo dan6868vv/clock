@@ -8,11 +8,11 @@
     #include <stdio.h>
 
 #elif defined(_WIN64)
-#include <cstdio>
 #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
 #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
 #endif
 #include <iostream>
+#include <cstdio>
 #include <unordered_map>
 #include <string>
 #include <sstream>
@@ -20,11 +20,12 @@
 #include <chrono>
 #ifdef __unix__
 
-bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* pipe_path, int &fd) {
-
+bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *pipe_path, int &fd) {
+    FILE *fp;
     if (fd == -1) {
         sleep(10);
         fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
+        fp = fdopen(fd, "r");
         sleep(10);
         if (errno == EWOULDBLOCK) {
             std::cout << "errno==EWOULDBLOCK" << std::endl;
@@ -34,16 +35,25 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* 
         return false;
     }
 
-    char buffer[1024];
-    ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
+    //  char buffer[1024];
+    //  ssize_t bytes = read(fd, buffer, sizeof(buffer) - 1);
     std::string buff;
 
-    if (bytes > 0) {
-        buffer[bytes] = '\0';
-        buff = std::string(buffer);
-    } else {
-        return false;
+    if (fp) {
+        // Читаем до символа ';' (вместо ';' можно любой char)
+        if (std::getline(std::cin, buff, ';')) {
+            // Успех, данные в buff (разделитель извлекается, но не сохраняется)
+            if (buff.size() <= 0) {
+                return false;
+            }
+        }
     }
+    // if (bytes > 0) {
+    //     buffer[bytes] = '\0';
+    //     buff = std::string(buffer);
+    // } else {
+    //     return false;
+    // }
 
     std::stringstream ss(buff);
     std::cout << "Buff" << buff << std::endl;
@@ -56,10 +66,10 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* 
                 return false;
             try {
                 jsonMap[key] = stof(item.substr(pos + 1));
-            } catch (const std::invalid_argument& e) {
+            } catch (const std::invalid_argument &e) {
                 std::cout << "❌ Ошибка: неверный формат числа" << std::endl;
                 std::cout << "   what(): " << e.what() << std::endl;
-            } catch (const std::exception& e) {
+            } catch (const std::exception &e) {
                 std::cout << "Ошибка: " << e.what() << std::endl;
             }
         }
@@ -91,10 +101,9 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
 }
 
 bool loadModelsByConfig() {
-
-
     return true;
 }
+
 void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
              std::unordered_map<std::string, float> jsonMapCurrent,
              std::unordered_map<std::string, float> &jsonMapDifferent) {
