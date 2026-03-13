@@ -18,10 +18,11 @@
 #include <sstream>
 #define __id "1"
 #include <chrono>
-#ifdef __unix__
+//#ifdef __unix__
 
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *pipe_path, int &fd) {
     FILE *fp;
+
     if (fd == -1) {
         sleep(10);
         fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
@@ -33,6 +34,8 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *
         perror("open");
         sleep(1);
         return false;
+    } else {
+        fp = fdopen(fd, "r");
     }
 
     //  char buffer[1024];
