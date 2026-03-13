@@ -179,7 +179,7 @@ int main() {
                 MatrixRotateX(0);
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
-    EndDrawing();
+   // EndDrawing();
 
     while (!getJsonByPipe(jsonMapTarget, pipe_path, fd)) {
         sleep(10);
