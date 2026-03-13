@@ -44,20 +44,23 @@ float getAngleByPipe() {
     return 0;
 }
 
-bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
-    const char *pipe_path = "/tmp/myapp_pipe";
-    mkfifo(pipe_path, 0666);
+bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char* pipe_path, int &fd) {
 
-    int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
+
+    // int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
+    //TODO
     // int fd = open(pipe_path, O_RDONLY);
     if (fd == -1) {
-        if(errno==EWOULDBLOCK) {
+        sleep(10);
+        fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
+        sleep(10);
+        if (errno == EWOULDBLOCK) {
             std::cout << "errno==EWOULDBLOCK" << std::endl;
-            sleep(10);
+      //      sleep(10);
         }
         perror("open");
         sleep(1);
-        close(fd);
+     //   close(fd);
         return false;
     }
 
@@ -69,12 +72,11 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap) {
     if (bytes > 0) {
         buffer[bytes] = '\0';
         buff = std::string(buffer);
-    }
-    else {
-        close(fd);
+    } else {
+      //  close(fd);
         return false;
     }
-    close(fd);
+  //  close(fd);
     std::cout << "Buffer:" << std::endl;
     std::cout << buff << std::endl;
 
@@ -125,6 +127,9 @@ void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
 
 int main() {
     InitWindow(800, 800, "3D Clock");
+    const char *pipe_path = "/tmp/myapp_pipe";
+    mkfifo(pipe_path, 0666);
+    int fd = open(pipe_path, O_RDONLY | O_NONBLOCK);
 
 #ifdef _WIN64
     Model clock = LoadModel("D:/_root/Job/AeroMash_new/Arrow_Display/_models_for_win/tv-45_frame.obj");
@@ -144,7 +149,7 @@ int main() {
     std::string line;
 
 #ifdef __unix__
-    while(!getJsonByPipe(jsonMapTarget)) {
+    while(!getJsonByPipe(jsonMapTarget,pipe_path,fd)) {
         sleep(10);
     }
         importModels(jsonMapTarget, modelMap);
@@ -162,7 +167,7 @@ int main() {
         ClearBackground(RAYWHITE);
         BeginMode3D(camera);
 #ifdef __unix__
-        getJsonByPipe(jsonMapTarget);
+        getJsonByPipe(jsonMapTarget,pipe_path,fd);
 
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
@@ -188,7 +193,7 @@ int main() {
     for (auto it: modelMap) {
         UnloadModel(it.second);
     }
-
+    close(fd);
     CloseWindow();
     return 0;
 }
