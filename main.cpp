@@ -159,6 +159,7 @@ int main() {
         EndMode3D();
         DrawFPS(10, 10);
         EndDrawing();
+        std::cout << "------------------------------------" << std::endl;
         for (auto i: jsonMapTarget) {
             std::cout << "\"" << i.first << "\": \"" << i.second << "\"" << std::endl;
         }
