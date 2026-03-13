@@ -105,7 +105,7 @@ void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
 }
 
 float convertScaleNumberToAngle(float scale) {
-    return 10*scale/36 + 20;
+    return 12*scale + 120;
 }
 int main() {
     InitWindow(800, 800, "3D Clock");
