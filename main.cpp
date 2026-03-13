@@ -117,6 +117,8 @@ std::unordered_map<std::string, std::string> loadDataFromConfigFile(const std::s
     if (!file.is_open()) {
         std::cout << "Config is not found" << std::endl;
         return config;
+    } else {
+        std::cout << "Config is found" << std::endl;
     }
     std::string line;
     while (std::getline(file, line)) {
@@ -171,7 +173,7 @@ int main() {
 
     BeginDrawing();
     importModels(config["load"], modelMap);
-    for(auto i:modelMap) {
+    for (auto i: modelMap) {
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
     EndDrawing();
@@ -180,7 +182,7 @@ int main() {
         sleep(10);
     }
 
-//    importModels(jsonMapTarget, modelMap);
+    //    importModels(jsonMapTarget, modelMap);
     jsonMapCurrent = jsonMapTarget;
     getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
 
