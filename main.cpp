@@ -10,6 +10,7 @@
 #elif defined(_WIN64)
 #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raylib.h"
 #include "D:/_root/Programs/_Lib_c++/raylib/raylib/src/raymath.h"
+#include <io.h>
 #endif
 #include <iostream>
 #include <cstdio>
@@ -19,7 +20,6 @@
 #define __id "1"
 #include <chrono>
 #include <fcntl.h>
-#include <io.h>
 #include <unistd.h>
 #include <vector>
 
