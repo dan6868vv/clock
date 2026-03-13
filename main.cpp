@@ -173,12 +173,16 @@ int main() {
     camera.fovy = 90.0f;
 
     BeginDrawing();
+    BeginMode3D(camera);
     importModels(config["load"], modelMap);
     for (auto i: modelMap) {
         i.second.transform =
                 MatrixRotateX(0);
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
+    EndDrawing();
+    EndMode3D();
+
    // EndDrawing();
 
     while (!getJsonByPipe(jsonMapTarget, pipe_path, fd)) {
