@@ -163,11 +163,13 @@ void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
 }
 
 float convertScaleNumberToAngle(float scale) {
-    return -116 * scale / 360 + 116;
+    return -360 * (scale - 116) / 116;
+
 }
 
 float convertAngleToScaleNumber(float angle) {
-    return -360 * (angle - 116) / 116;
+    return -116 * angle / 360 + 116;
+
 }
 
 int main() {
