@@ -191,7 +191,7 @@ int main() {
     BeginMode3D(camera);
     importModels(config["load"], modelMap,jsonMapTarget);
     for (auto i: modelMap) {
-        // i.second.transform = MatrixRotateX(0);
+        i.second.transform = MatrixRotateX(jsonMapTarget[i.first]);
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
     EndDrawing();
