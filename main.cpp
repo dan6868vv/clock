@@ -215,7 +215,11 @@ int main() {
     //    importModels(jsonMapTarget, modelMap);
     jsonMapCurrent = jsonMapTarget;
     getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
-
+    std::cout << "jsonMapDifferent: " << std::endl;
+    for (auto a: jsonMapDifferent) {
+        std::cout << a.first << " : " << a.second << std::endl;
+    }
+    std::cout << "--------------------------" << std::endl;
     while (!WindowShouldClose()) {
         BeginDrawing();
         ClearBackground(RAYWHITE);
@@ -223,6 +227,11 @@ int main() {
 
         getJsonByPipe(jsonMapTarget, pipe_path, fd);
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
+        std::cout << "jsonMapCurrent: " << std::endl;
+        for (auto a: jsonMapCurrent) {
+            std::cout << a.first << " : " << a.second << std::endl;
+        }
+        std::cout << "--------------------------" << std::endl;
         for (auto &it: modelMap) {
             jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
             it.second.transform =
