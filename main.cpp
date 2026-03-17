@@ -122,7 +122,7 @@ bool importModels(std::string configLoad,
         Model model = LoadModel(
             (filePath + idStr + "/" + nameModel + ".obj").c_str());
         modelMap[nameModel] = model;
-   //     modelMap[nameModel].transform = MatrixRotateX(angle);
+   modelMap[nameModel].transform = MatrixRotateX(angle);
     }
     return true;
 }
