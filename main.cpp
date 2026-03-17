@@ -85,7 +85,6 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
         if (i.first == "id")
             continue;
         std::string filePath = "/home/andrey/qwer/clock/_models_for_unix/";
-
         std::ostringstream oss;
         oss << std::noshowpoint << id; // Убираем десятичную точку, если число целое
         std::string idStr = oss.str(); // "1"
@@ -206,10 +205,10 @@ int main() {
         std::cout << a.first << " : " << a.second << ":" << convertScaleNumberToAngle(a.second) << std::endl;
     }
     std::cout << "--------------------------" << std::endl;
-    for (auto i: modelMap) {
-        // i.second.transform = MatrixRotateX(convertScaleNumberToAngle(jsonMapTarget[i.first]));
-        DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
-    }
+    // for (auto i: modelMap) {
+    //     // i.second.transform = MatrixRotateX(convertScaleNumberToAngle(jsonMapTarget[i.first]));
+    //     DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
+    // }
     EndDrawing();
     EndMode3D();
 
