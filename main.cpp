@@ -194,6 +194,11 @@ int main() {
         i.second.transform = MatrixRotateX(jsonMapTarget[i.first]);
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
+    std::cout << "JsonMapTarget: " << std::endl ;
+    for(auto a:jsonMapTarget) {
+        std::cout << a.first << " : " << a.second << std::endl;
+    }
+    std::cout << "--------------------------" <<std::endl;
     EndDrawing();
     EndMode3D();
 
