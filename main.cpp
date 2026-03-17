@@ -204,7 +204,7 @@ int main() {
     }
     std::cout << "--------------------------" << std::endl;
     for (auto i: modelMap) {
-        i.second.transform = MatrixRotateX(convertScaleNumberToAngle(jsonMapTarget[i.first]));
+        // i.second.transform = MatrixRotateX(convertScaleNumberToAngle(jsonMapTarget[i.first]));
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
     EndDrawing();
