@@ -77,6 +77,8 @@ bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *
 
 bool importModels(std::unordered_map<std::string, float> jsonMap,
                   std::unordered_map<std::string, Model> &modelMap) {
+    std::cout << "In import models\n";
+
     float id = jsonMap["id"];
     for (auto i: jsonMap) {
         std::cout << i.first << ":" << i.second << std::endl;
@@ -93,6 +95,8 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
             modelMap[i.first] = model;
         }
     }
+    std::cout << "--------------------\n";
+
     return true;
 }
 
@@ -110,7 +114,6 @@ std::pair<std::string, float> splitString(char spliter, std::string str) {
 bool importModels(std::string configLoad,
                   std::unordered_map<std::string, Model> &modelMap,
                   std::unordered_map<std::string, float> &jsonMapTarget) {
-    std::cout << "In import models\n";
     std::stringstream ss(configLoad);
     std::cout << "config[\"load\"]: " << configLoad << std::endl;
     std::string item;
@@ -126,7 +129,6 @@ bool importModels(std::string configLoad,
         modelMap[nameModel] = model;
         modelMap[nameModel].transform = MatrixRotateX(angle);
     }
-    std::cout << "--------------------\n";
     return true;
 }
 
