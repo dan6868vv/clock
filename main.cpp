@@ -85,9 +85,11 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
         std::ostringstream oss;
         oss << std::noshowpoint << id; // Убираем десятичную точку, если число целое
         std::string idStr = oss.str(); // "1"
-        Model model = LoadModel(
-            (filePath + idStr + "/" + i.first + ".obj").c_str());
-        modelMap[i.first] = model;
+        if(modelMap.bucket(i.first)) {
+            Model model = LoadModel(
+             (filePath + idStr + "/" + i.first + ".obj").c_str());
+            modelMap[i.first] = model;
+        }
     }
     return true;
 }
@@ -208,20 +210,20 @@ int main() {
 
         getJsonByPipe(jsonMapTarget, pipe_path, fd);
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
-        // for (auto &it: modelMap) {
-        //     jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
-        //     it.second.transform =
-        //             // MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
-        //             MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
-        //     DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
-        // }
-
-        for (auto it: jsonMapDifferent) {
+        for (auto &it: modelMap) {
             jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
-            modelMap[it.first].transform = MatrixRotateX(
-                DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
-            DrawModel(modelMap[it.first], (Vector3){0, 0, 0}, 1.0f, WHITE);
+            it.second.transform =
+                    // MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
+                    MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
+            DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
+
+        // for (auto it: jsonMapDifferent) {
+        //     jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
+        //     modelMap[it.first].transform = MatrixRotateX(
+        //         DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
+        //     DrawModel(modelMap[it.first], (Vector3){0, 0, 0}, 1.0f, WHITE);
+        // }
 
         EndMode3D();
         DrawFPS(10, 10);
