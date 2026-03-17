@@ -198,15 +198,15 @@ int main() {
     ClearBackground(RAYWHITE);
     BeginMode3D(camera);
     importModels(config["load"], modelMap, jsonMapTarget);
+    std::cout << "JsonMapTarget: " << std::endl;
+    for (auto a: jsonMapTarget) {
+        std::cout << a.first << " : " << a.second << ":" << convertScaleNumberToAngle(a.second) << std::endl;
+    }
+    std::cout << "--------------------------" << std::endl;
     for (auto i: modelMap) {
         i.second.transform = MatrixRotateX(convertScaleNumberToAngle(jsonMapTarget[i.first]));
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
-    std::cout << "JsonMapTarget: " << std::endl;
-    for (auto a: jsonMapTarget) {
-        std::cout << a.first << " : " << a.second << std::endl;
-    }
-    std::cout << "--------------------------" << std::endl;
     EndDrawing();
     EndMode3D();
 
