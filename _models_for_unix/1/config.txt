@@ -1,4 +1,4 @@
 k = 1
 b = 2
 # for y=kx+b
-load = needle_1,needle_2,scale,yellow,cover,red,green
+load = needle_1:0,needle_2:0,scale:0,yellow:10,cover:50,red:90,green:180

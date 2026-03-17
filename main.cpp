@@ -214,6 +214,11 @@ int main() {
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
 
+        for(auto it:jsonMapDifferent) {
+            jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
+            modelMap[it.first]
+        }
+
         EndMode3D();
         DrawFPS(10, 10);
         EndDrawing();
