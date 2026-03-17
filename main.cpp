@@ -23,7 +23,7 @@
 #include <unistd.h>
 #include <vector>
 #include <fstream>  // Для чтения конфигурационного файла
-
+float convertAngleToScaleNumber(float angle);
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *pipe_path, int &fd) {
     if (fd == -1) {
         sleep(10);
@@ -116,7 +116,7 @@ bool importModels(std::string configLoad,
         std::string idStr = __id;
         std::string nameModel = splitString(':', item).first;
         float angle = splitString(':', item).second;
-        jsonMapTarget[nameModel] = angle;
+        jsonMapTarget[nameModel] = convertAngleToScaleNumber(angle);
         Model model = LoadModel(
             (filePath + idStr + "/" + nameModel + ".obj").c_str());
         modelMap[nameModel] = model;
@@ -164,6 +164,10 @@ float convertScaleNumberToAngle(float scale) {
     return -17 * scale / 6 + 360;
 }
 
+float convertAngleToScaleNumber(float angle) {
+    return -6 * (angle - 360) / 17;
+}
+
 int main() {
     InitWindow(800, 800, "3D Clock");
     const char *pipe_path = "/tmp/myapp_pipe";
@@ -189,16 +193,16 @@ int main() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     BeginMode3D(camera);
-    importModels(config["load"], modelMap,jsonMapTarget);
+    importModels(config["load"], modelMap, jsonMapTarget);
     for (auto i: modelMap) {
         i.second.transform = MatrixRotateX(jsonMapTarget[i.first]);
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
-    std::cout << "JsonMapTarget: " << std::endl ;
-    for(auto a:jsonMapTarget) {
+    std::cout << "JsonMapTarget: " << std::endl;
+    for (auto a: jsonMapTarget) {
         std::cout << a.first << " : " << a.second << std::endl;
     }
-    std::cout << "--------------------------" <<std::endl;
+    std::cout << "--------------------------" << std::endl;
     EndDrawing();
     EndMode3D();
 
@@ -224,7 +228,6 @@ int main() {
                     MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
-
         // for (auto it: jsonMapDifferent) {
         //     jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
         //     modelMap[it.first].transform = MatrixRotateX(
