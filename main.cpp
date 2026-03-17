@@ -85,9 +85,9 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
         std::ostringstream oss;
         oss << std::noshowpoint << id; // Убираем десятичную точку, если число целое
         std::string idStr = oss.str(); // "1"
-        if(modelMap.bucket(i.first)) {
+        if (modelMap.bucket(i.first)) {
             Model model = LoadModel(
-             (filePath + idStr + "/" + i.first + ".obj").c_str());
+                (filePath + idStr + "/" + i.first + ".obj").c_str());
             modelMap[i.first] = model;
         }
     }
@@ -106,7 +106,8 @@ std::pair<std::string, float> splitString(char spliter, std::string str) {
 }
 
 bool importModels(std::string configLoad,
-                  std::unordered_map<std::string, Model> &modelMap) {
+                  std::unordered_map<std::string, Model> &modelMap,
+                  std::unordered_map<std::string, float> &jsonMapTarget) {
     std::stringstream ss(configLoad);
     std::cout << "config[\"load\"]: " << configLoad << std::endl;
     std::string item;
@@ -115,6 +116,7 @@ bool importModels(std::string configLoad,
         std::string idStr = __id;
         std::string nameModel = splitString(':', item).first;
         float angle = splitString(':', item).second;
+        jsonMapTarget[nameModel] = angle;
         Model model = LoadModel(
             (filePath + idStr + "/" + nameModel + ".obj").c_str());
         modelMap[nameModel] = model;
@@ -187,7 +189,7 @@ int main() {
     BeginDrawing();
     ClearBackground(RAYWHITE);
     BeginMode3D(camera);
-    importModels(config["load"], modelMap);
+    importModels(config["load"], modelMap,jsonMapTarget);
     for (auto i: modelMap) {
         // i.second.transform = MatrixRotateX(0);
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
