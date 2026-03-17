@@ -110,6 +110,7 @@ std::pair<std::string, float> splitString(char spliter, std::string str) {
 bool importModels(std::string configLoad,
                   std::unordered_map<std::string, Model> &modelMap,
                   std::unordered_map<std::string, float> &jsonMapTarget) {
+    std::cout << "In import models\n";
     std::stringstream ss(configLoad);
     std::cout << "config[\"load\"]: " << configLoad << std::endl;
     std::string item;
@@ -119,11 +120,13 @@ bool importModels(std::string configLoad,
         std::string nameModel = splitString(':', item).first;
         float angle = splitString(':', item).second;
         jsonMapTarget[nameModel] = convertAngleToScaleNumber(angle);
+        std::cout <<nameModel << ":" << angle << std::endl;
         Model model = LoadModel(
             (filePath + idStr + "/" + nameModel + ".obj").c_str());
         modelMap[nameModel] = model;
-   modelMap[nameModel].transform = MatrixRotateX(angle);
+        modelMap[nameModel].transform = MatrixRotateX(angle);
     }
+    std::cout << "--------------------\n";
     return true;
 }
 
@@ -164,12 +167,10 @@ void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
 
 float convertScaleNumberToAngle(float scale) {
     return -360 * (scale - 116) / 116;
-
 }
 
 float convertAngleToScaleNumber(float angle) {
     return -116 * angle / 360 + 116;
-
 }
 
 int main() {
