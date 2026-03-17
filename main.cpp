@@ -163,11 +163,11 @@ void getDiff(std::unordered_map<std::string, float> jsonMapTarget,
 }
 
 float convertScaleNumberToAngle(float scale) {
-    return 3 * scale;
+    return -116 * scale / 360 + 116;
 }
 
 float convertAngleToScaleNumber(float angle) {
-    return - angle / 3 + 360;
+    return -360 * (angle - 116) / 116;
 }
 
 int main() {
@@ -235,8 +235,8 @@ int main() {
         for (auto &it: modelMap) {
             jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
             it.second.transform =
-                    MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
-                    // MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
+                    // MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
+                    MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
             DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
         // for (auto it: jsonMapDifferent) {
