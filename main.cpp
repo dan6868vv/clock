@@ -91,7 +91,16 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
     }
     return true;
 }
-
+std::pair<std::string, float> splitString(char spliter, std::string str) {
+    std::pair<std::string, float> splitedStr;
+    std::stringstream ss(str);
+    std::string buff;
+    std::getline(ss, buff, spliter);
+    splitedStr.first = buff;
+    std::getline(ss, buff, spliter);
+    splitedStr.second = std::stof(buff);
+    return splitedStr;
+}
 bool importModels(std::string configLoad,
                   std::unordered_map<std::string, Model> &modelMap) {
     std::stringstream ss(configLoad);
@@ -100,14 +109,13 @@ bool importModels(std::string configLoad,
     while (std::getline(ss, item, ',')) {
         std::string filePath = "/home/andrey/qwer/clock/_models_for_unix/";
         std::string idStr = __id;
+        std::string nameModel = splitString(':', item).first;
+        float angle = splitString(':', item).second;
         Model model = LoadModel(
-            (filePath + idStr + "/" + item + ".obj").c_str());
-        modelMap[item] = model;
+            (filePath + idStr + "/" + nameModel + ".obj").c_str());
+        modelMap[nameModel] = model;
+        modelMap[nameModel].transform = MatrixRotateX(angle);
     }
-    return true;
-}
-
-bool loadModelsByConfig() {
     return true;
 }
 
@@ -173,17 +181,15 @@ int main() {
     camera.fovy = 90.0f;
 
     BeginDrawing();
+    ClearBackground(RAYWHITE);
     BeginMode3D(camera);
     importModels(config["load"], modelMap);
     for (auto i: modelMap) {
-        i.second.transform =
-                MatrixRotateX(0);
+        // i.second.transform = MatrixRotateX(0);
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
     EndDrawing();
     EndMode3D();
-
-   // EndDrawing();
 
     while (!getJsonByPipe(jsonMapTarget, pipe_path, fd)) {
         sleep(10);
@@ -201,7 +207,7 @@ int main() {
         getJsonByPipe(jsonMapTarget, pipe_path, fd);
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
         for (auto &it: modelMap) {
-            jsonMapCurrent[it.first] += 0.4f * jsonMapDifferent[it.first];
+            jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
             it.second.transform =
                     // MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
                     MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
