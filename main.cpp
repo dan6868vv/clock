@@ -91,6 +91,7 @@ bool importModels(std::unordered_map<std::string, float> jsonMap,
     }
     return true;
 }
+
 std::pair<std::string, float> splitString(char spliter, std::string str) {
     std::pair<std::string, float> splitedStr;
     std::stringstream ss(str);
@@ -101,6 +102,7 @@ std::pair<std::string, float> splitString(char spliter, std::string str) {
     splitedStr.second = std::stof(buff);
     return splitedStr;
 }
+
 bool importModels(std::string configLoad,
                   std::unordered_map<std::string, Model> &modelMap) {
     std::stringstream ss(configLoad);
@@ -206,17 +208,19 @@ int main() {
 
         getJsonByPipe(jsonMapTarget, pipe_path, fd);
         getDiff(jsonMapTarget, jsonMapCurrent, jsonMapDifferent);
-        for (auto &it: modelMap) {
-            jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
-            it.second.transform =
-                    // MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
-                    MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
-            DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
-        }
+        // for (auto &it: modelMap) {
+        //     jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
+        //     it.second.transform =
+        //             // MatrixRotateX(DEG2RAD * (jsonMapCurrent[it.first]));
+        //             MatrixRotateX(DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
+        //     DrawModel(it.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
+        // }
 
-        for(auto it:jsonMapDifferent) {
+        for (auto it: jsonMapDifferent) {
             jsonMapCurrent[it.first] += 0.2f * jsonMapDifferent[it.first];
-            modelMap[it.first]
+            modelMap[it.first].transform = MatrixRotateX(
+                DEG2RAD * (convertScaleNumberToAngle(jsonMapCurrent[it.first])));
+            DrawModel(modelMap[it.first], (Vector3){0, 0, 0}, 1.0f, WHITE);
         }
 
         EndMode3D();
