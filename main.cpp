@@ -23,7 +23,9 @@
 #include <unistd.h>
 #include <vector>
 #include <fstream>  // Для чтения конфигурационного файла
+
 float convertAngleToScaleNumber(float angle);
+
 bool getJsonByPipe(std::unordered_map<std::string, float> &jsonMap, const char *pipe_path, int &fd) {
     if (fd == -1) {
         sleep(10);
@@ -195,7 +197,7 @@ int main() {
     BeginMode3D(camera);
     importModels(config["load"], modelMap, jsonMapTarget);
     for (auto i: modelMap) {
-        i.second.transform = MatrixRotateX(jsonMapTarget[i.first]);
+        i.second.transform = MatrixRotateX(convertScaleNumberToAngle(jsonMapTarget[i.first]));
         DrawModel(i.second, (Vector3){0, 0, 0}, 1.0f, WHITE);
     }
     std::cout << "JsonMapTarget: " << std::endl;
